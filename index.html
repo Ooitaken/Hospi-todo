@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="病棟ToDo">
+<title>病棟ToDo</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  background: #f2f2f7;
+  color: #111;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255,255,255,.95);
+  padding: 14px 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+main {
+  padding: 14px;
+  max-width: 700px;
+  margin: auto;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.add-patient {
+  background: #007aff;
+  color: white;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.patient-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.initial {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  padding: 9px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.delete {
+  background: #ffe5e5;
+  color: #c00;
+  padding: 8px 11px;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 2px;
+  border-bottom: 1px solid #eee;
+}
+
+.todo input[type=checkbox] {
+  width: 21px;
+  height: 21px;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 16px;
+}
+
+.completed {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.todo-entry {
+  display: flex;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.todo-entry input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.todo-entry button {
+  background: #007aff;
+  color: white;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.toolbar button {
+  background: #e5e5ea;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  margin-top: 60px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-row">
+    <h1>病棟 ToDo</h1>
+    <button class="add-patient" onclick="addPatient()">＋ 患者</button>
+  </div>
+</header>
+
+<main>
+
+<div class="toolbar">
+  <button onclick="deleteCompleted()">✓ 完了を削除</button>
+</div>
+
+<div id="patients"></div>
+
+<div id="empty" class="empty">
+  ＋患者 から追加してください
+</div>
+
+</main>
+
+<script>
+
+let patients = [];
+
+try {
+  patients = JSON.parse(localStorage.getItem("hospiTodo")) || [];
+} catch {
+  patients = [];
+}
+
+function save() {
+  localStorage.setItem("hospiTodo", JSON.stringify(patients));
+}
+
+function addPatient() {
+  patients.push({
+    id: Date.now(),
+    initial: "",
+    todos: []
+  });
+
+  save();
+  render();
+}
+
+function deletePatient(id) {
+
+  if (!confirm("この患者を削除しますか？")) return;
+
+  patients = patients.filter(p => p.id !== id);
+
+  save();
+  render();
+}
+
+function updateInitial(id, value) {
+
+  const patient = patients.find(p => p.id === id);
+
+  if (patient) {
+    patient.initial = value.toUpperCase();
+    save();
+  }
+}
+
+function addTodo(id) {
+
+  const input = document.getElementById("input-" + id);
+
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  const patient = patients.find(p => p.id === id);
+
+  patient.todos.push({
+    id: Date.now(),
+    text: text,
+    done: false
+  });
+
+  save();
+  render();
+}
+
+function toggleTodo(patientId, todoId) {
+
+  const patient = patients.find(p => p.id === patientId);
+
+  const todo = patient.todos.find(t => t.id === todoId);
+
+  todo.done = !todo.done;
+
+  save();
+  render();
+}
+
+function deleteTodo(patientId, todoId) {
+
+  const patient = patients.find(p => p.id === patientId);
+
+  patient.todos =
+    patient.todos.filter(t => t.id !== todoId);
+
+  save();
+  render();
+}
+
+function deleteCompleted() {
+
+  patients.forEach(p => {
+    p.todos = p.todos.filter(t => !t.done);
+  });
+
+  save();
+  render();
+}
+
+function render() {
+
+  const container =
+    document.getElementById("patients");
+
+  container.innerHTML = "";
+
+  document.getElementById("empty").style.display =
+    patients.length ? "none" : "block";
+
+  patients.forEach(patient => {
+
+    const card = document.createElement("div");
+
+    card.className = "card";
+
+    let todos = "";
+
+    patient.todos.forEach(todo => {
+
+      todos += `
+      <div class="todo">
+
+        <input
+          type="checkbox"
+          ${todo.done ? "checked" : ""}
+          onchange="toggleTodo(${patient.id},${todo.id})">
+
+        <span class="todo-text ${todo.done ? "completed" : ""}">
+          ${escapeHTML(todo.text)}
+        </span>
+
+        <button
+          class="delete"
+          onclick="deleteTodo(${patient.id},${todo.id})">
+          ×
+        </button>
+
+      </div>
+      `;
+    });
+
+    card.innerHTML = `
+
+      <div class="patient-header">
+
+        <input
+          class="initial"
+          maxlength="8"
+          placeholder="イニシャル"
+          value="${escapeHTML(patient.initial)}"
+          oninput="updateInitial(${patient.id},this.value)">
+
+        <button
+          class="delete"
+          onclick="deletePatient(${patient.id})">
+          削除
+        </button>
+
+      </div>
+
+      ${todos}
+
+      <div class="todo-entry">
+
+        <input
+          id="input-${patient.id}"
+          type="text"
+          placeholder="ToDoを入力"
+          onkeydown="
+            if(event.key==='Enter'){
+              addTodo(${patient.id})
+            }">
+
+        <button
+          onclick="addTodo(${patient.id})">
+          追加
+        </button>
+
+      </div>
+    `;
+
+    container.appendChild(card);
+
+  });
+
+}
+
+function escapeHTML(str) {
+
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+render();
+
+</script>
+
+</body>
+</html>

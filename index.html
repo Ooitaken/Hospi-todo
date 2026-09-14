@@ -2,998 +2,509 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover"
->
-
-<meta
-  name="apple-mobile-web-app-capable"
-  content="yes"
->
-
-<meta
-  name="apple-mobile-web-app-status-bar-style"
-  content="default"
->
-
-<meta
-  name="apple-mobile-web-app-title"
-  content="病棟ToDo"
->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="病棟ToDo">
 
 <title>病棟ToDo</title>
 
 <style>
-
-* {
-  box-sizing: border-box;
-}
+* { box-sizing:border-box; }
 
 :root {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
 }
 
 body {
-  margin: 0;
-  background: #f2f2f7;
-  color: #111;
+  margin:0;
+  background:#f2f2f7;
+  color:#111;
 }
 
-button,
-input,
-select {
-  font: inherit;
+button,input,select,textarea {
+  font:inherit;
 }
 
 button {
-  border: 0;
-  border-radius: 9px;
-  padding: 8px 10px;
-  font-weight: 600;
+  border:0;
+  border-radius:9px;
+  padding:8px 10px;
+  font-weight:600;
 }
 
 header {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-
-  background:
-    rgba(255,255,255,.97);
-
-  border-bottom:
-    1px solid #ddd;
-
-  padding-top:
-    env(safe-area-inset-top);
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid #ddd;
+  padding-top:env(safe-area-inset-top);
 }
 
 .headerTop {
-  display: flex;
-  justify-content:
-    space-between;
-  align-items: center;
-
-  padding:
-    11px 14px 8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 14px 8px;
 }
 
 h1 {
-  margin: 0;
-  font-size: 21px;
+  margin:0;
+  font-size:21px;
 }
 
 .tabs {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap: 6px;
-
-  padding:
-    0 12px 8px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+  padding:0 8px 8px;
 }
 
 .tabButton {
-  border: 0;
-  border-radius: 9px;
-
-  padding: 9px 4px;
-
-  background:
-    #e5e5ea;
-
-  font-weight: 700;
-
-  font-size: 13px;
+  border:0;
+  border-radius:9px;
+  padding:9px 2px;
+  background:#e5e5ea;
+  font-weight:700;
+  font-size:12px;
 }
 
 .tabButton.active {
-  background:
-    #007aff;
-
-  color: white;
+  background:#007aff;
+  color:white;
 }
 
 main {
-  max-width: 800px;
-  margin: auto;
-
-  padding: 12px;
-
-  padding-bottom:
-    calc(
-      35px +
-      env(safe-area-inset-bottom)
-    );
+  max-width:850px;
+  margin:auto;
+  padding:12px;
+  padding-bottom:calc(40px + env(safe-area-inset-bottom));
 }
 
-.blue {
-  background:
-    #007aff;
-
-  color:
-    white;
-}
-
-.gray {
-  background:
-    #e5e5ea;
-
-  color:
-    #111;
-}
-
-.red {
-  background:
-    #ffe5e5;
-
-  color:
-    #b00020;
-}
-
-.green {
-  background:
-    #dff6e5;
-
-  color:
-    #157a32;
-}
+.blue { background:#007aff; color:white; }
+.gray { background:#e5e5ea; color:#111; }
+.red { background:#ffe5e5; color:#b00020; }
+.green { background:#dff6e5; color:#157a32; }
+.orange { background:#fff0cf; color:#8a5a00; }
 
 .toolbar {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 7px;
-
-  margin-bottom: 10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:10px;
 }
 
 .card {
-  background:
-    white;
-
-  border-radius:
-    15px;
-
-  padding:
-    12px;
-
-  margin-bottom:
-    12px;
-
-  box-shadow:
-    0 1px 4px
-    rgba(0,0,0,.08);
+  background:white;
+  border-radius:15px;
+  padding:12px;
+  margin-bottom:12px;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
 }
 
 .card.finished {
-  opacity: .55;
+  opacity:.55;
 }
 
-/* =========================
-   患者
-========================= */
-
 .patientTop {
-  display: grid;
-
-  grid-template-columns:
-    72px 1fr auto;
-
-  gap: 7px;
-
-  align-items:
-    center;
+  display:grid;
+  grid-template-columns:78px 1fr auto;
+  gap:7px;
+  align-items:center;
 }
 
 .room,
-.patientName {
-  width: 100%;
-
-  border:
-    1px solid #ccc;
-
-  border-radius:
-    9px;
-
-  padding:
-    9px;
-
-  background:
-    white;
-
-  font-size:
-    16px;
+.patientName,
+.simpleInput {
+  width:100%;
+  border:1px solid #ccc;
+  border-radius:9px;
+  padding:9px;
+  background:white;
+  font-size:16px;
 }
 
 .patientName {
-  font-weight:
-    700;
+  font-weight:700;
 }
 
 .moveRow {
-  display:
-    flex;
-
-  gap:
-    4px;
+  display:flex;
+  gap:4px;
 }
 
 .statusRow {
-  display:
-    flex;
-
-  gap:
-    6px;
-
-  flex-wrap:
-    wrap;
-
-  margin-top:
-    8px;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:8px;
 }
 
-/* =========================
-   オーダー
-========================= */
-
-.orderDetails {
-  background:
-    #f7f7f9;
-
-  border-radius:
-    11px;
-
-  margin-top:
-    10px;
-
-  overflow:
-    hidden;
+.detailsBox {
+  background:#f7f7f9;
+  border-radius:11px;
+  margin-top:10px;
+  overflow:hidden;
 }
 
-.orderDetails summary {
-  cursor:
-    pointer;
-
-  padding:
-    10px;
-
-  font-size:
-    14px;
-
-  font-weight:
-    700;
-
-  user-select:
-    none;
+.detailsBox summary {
+  cursor:pointer;
+  padding:10px;
+  font-size:14px;
+  font-weight:700;
+  user-select:none;
 }
 
-.orderContent {
-  padding:
-    0 9px 9px;
+.detailsContent {
+  padding:0 9px 10px;
 }
 
-.orderGrid {
-  display:
-    grid;
-
-  grid-template-columns:
-    55px 1fr auto;
-
-  gap:
-    6px;
-
-  align-items:
-    center;
-
-  margin-bottom:
-    6px;
+.formRow {
+  display:grid;
+  grid-template-columns:72px 1fr auto;
+  gap:6px;
+  align-items:center;
+  margin-bottom:7px;
 }
 
-.orderGrid input {
-  width:
-    100%;
+.formRow input,
+.formRow select,
+.formRow textarea {
+  width:100%;
+  min-width:0;
+  border:1px solid #ccc;
+  border-radius:8px;
+  padding:7px;
+  background:white;
+}
 
-  min-width:
-    0;
-
-  border:
-    1px solid #ccc;
-
-  border-radius:
-    8px;
-
-  padding:
-    7px;
-
-  background:
-    white;
+.formRow textarea {
+  min-height:90px;
+  resize:vertical;
 }
 
 .badge {
-  border-radius:
-    999px;
-
-  padding:
-    4px 7px;
-
-  font-size:
-    11px;
-
-  font-weight:
-    700;
-
-  white-space:
-    nowrap;
+  border-radius:999px;
+  padding:4px 7px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
 }
 
-.expired {
-  background:
-    #ffdada;
-
-  color:
-    #a40000;
-}
-
-.today {
-  background:
-    #ffe8b3;
-
-  color:
-    #865700;
-}
-
-.tomorrow {
-  background:
-    #fff3c7;
-
-  color:
-    #755800;
-}
-
-.safe {
-  background:
-    #dff6e5;
-
-  color:
-    #12692d;
-}
-
-.none {
-  background:
-    #e5e5ea;
-
-  color:
-    #666;
-}
-
-/* =========================
-   Todo
-========================= */
+.expired { background:#ffdada; color:#a40000; }
+.today { background:#ffe8b3; color:#865700; }
+.tomorrow { background:#fff3c7; color:#755800; }
+.safe { background:#dff6e5; color:#12692d; }
+.none { background:#e5e5ea; color:#666; }
+.noPlan { background:#e8e8ed; color:#555; }
 
 .todo {
-  padding:
-    10px 0;
-
-  border-bottom:
-    1px solid #eee;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
 }
 
 .todoMain {
-  display:
-    flex;
-
-  gap:
-    8px;
-
-  align-items:
-    flex-start;
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
 }
 
 .todoMain input[type="checkbox"] {
-  width:
-    20px;
-
-  height:
-    20px;
+  width:20px;
+  height:20px;
 }
 
 .todoText {
-  flex:
-    1;
-
-  font-size:
-    16px;
-
-  overflow-wrap:
-    anywhere;
+  flex:1;
+  font-size:16px;
+  overflow-wrap:anywhere;
 }
 
 .done {
-  text-decoration:
-    line-through;
-
-  color:
-    #999;
+  text-decoration:line-through;
+  color:#999;
 }
 
 .todoMeta {
-  display:
-    flex;
-
-  flex-wrap:
-    wrap;
-
-  gap:
-    5px;
-
-  margin:
-    5px 0 0 28px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin:5px 0 0 28px;
 }
 
 .tag {
-  padding:
-    3px 7px;
-
-  border-radius:
-    6px;
-
-  font-size:
-    11px;
-
-  font-weight:
-    700;
+  padding:3px 7px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:700;
 }
 
-.high {
-  background:
-    #ffdada;
-
-  color:
-    #a00000;
-}
-
-.normal {
-  background:
-    #e5e5ea;
-}
-
-.low {
-  background:
-    #e8f3ff;
-
-  color:
-    #1467a5;
-}
-
-.dateTag {
-  background:
-    #eeeafc;
-
-  color:
-    #51409a;
-}
-
-.overdueTag {
-  background:
-    #ffdada;
-
-  color:
-    #a00000;
-}
+.high { background:#ffdada; color:#a00000; }
+.normal { background:#e5e5ea; }
+.low { background:#e8f3ff; color:#1467a5; }
+.dateTag { background:#eeeafc; color:#51409a; }
+.overdueTag { background:#ffdada; color:#a00000; }
 
 .todoEntry {
-  display:
-    grid;
-
-  grid-template-columns:
-    1fr 92px 140px auto;
-
-  gap:
-    5px;
-
-  margin-top:
-    10px;
+  display:grid;
+  grid-template-columns:1fr 92px 140px auto;
+  gap:5px;
+  margin-top:10px;
 }
 
 .todoEntry input,
 .todoEntry select {
-  width:
-    100%;
+  width:100%;
+  min-width:0;
+  border:1px solid #ccc;
+  border-radius:8px;
+  padding:8px;
+  background:white;
+}
 
-  min-width:
-    0;
+.sectionTitle {
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:4px;
+}
 
-  border:
-    1px solid #ccc;
-
-  border-radius:
-    8px;
-
-  padding:
-    8px;
-
-  background:
-    white;
+.smallText {
+  font-size:12px;
+  color:#666;
 }
 
 .empty {
-  text-align:
-    center;
-
-  color:
-    #888;
-
-  margin-top:
-    50px;
+  text-align:center;
+  color:#888;
+  margin-top:50px;
 }
 
-/* =========================
-   採血タブ
-========================= */
+.subTabs {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-bottom:12px;
+}
 
-.bloodTop {
-  display:
-    flex;
+.subTab {
+  background:#e5e5ea;
+}
 
-  gap:
-    7px;
-
-  flex-wrap:
-    wrap;
-
-  margin-bottom:
-    10px;
+.subTab.active {
+  background:#007aff;
+  color:white;
 }
 
 .bloodPatientRow {
-  display:
-    grid;
-
-  grid-template-columns:
-    auto 1fr auto;
-
-  gap:
-    10px;
-
-  align-items:
-    center;
-
-  padding:
-    11px 4px;
-
-  border-bottom:
-    1px solid #eee;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:11px 4px;
+  border-bottom:1px solid #eee;
 }
 
 .bloodPatientRow input {
-  width:
-    22px;
-
-  height:
-    22px;
+  width:22px;
+  height:22px;
 }
 
 .bloodPatientName {
-  font-weight:
-    700;
+  font-weight:700;
 }
 
 .registeredBadge {
-  background:
-    #dff6e5;
-
-  color:
-    #157a32;
-
-  border-radius:
-    999px;
-
-  padding:
-    4px 8px;
-
-  font-size:
-    11px;
-
-  font-weight:
-    700;
-
-  white-space:
-    nowrap;
+  background:#dff6e5;
+  color:#157a32;
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:11px;
+  font-weight:700;
 }
-
-.bloodAddButton {
-  width:
-    100%;
-
-  margin-top:
-    12px;
-
-  padding:
-    11px;
-}
-
-/* =========================
-   Calendar
-========================= */
 
 .calendarHeader {
-  display:
-    grid;
-
-  grid-template-columns:
-    auto 1fr auto;
-
-  gap:
-    8px;
-
-  align-items:
-    center;
-
-  margin-bottom:
-    10px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:8px;
+  align-items:center;
+  margin-bottom:10px;
 }
 
 .calendarTitle {
-  text-align:
-    center;
-
-  font-size:
-    20px;
-
-  font-weight:
-    800;
+  text-align:center;
+  font-size:20px;
+  font-weight:800;
 }
 
-.calendarNote {
-  margin-bottom:
-    10px;
-
-  font-size:
-    12px;
-
-  color:
-    #666;
-}
-
-.weekHeader {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(7,1fr);
-
-  gap:
-    3px;
-
-  margin-bottom:
-    3px;
+.weekHeader,
+.calendarGrid {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:3px;
 }
 
 .weekHeader div {
-  text-align:
-    center;
-
-  font-size:
-    12px;
-
-  color:
-    #666;
-
-  font-weight:
-    700;
-}
-
-.calendarGrid {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(7,1fr);
-
-  gap:
-    3px;
+  text-align:center;
+  font-size:12px;
+  color:#666;
+  font-weight:700;
 }
 
 .dayCell {
-  min-height:
-    105px;
-
-  background:
-    white;
-
-  border-radius:
-    8px;
-
-  padding:
-    5px;
-
-  overflow:
-    hidden;
+  min-height:100px;
+  background:white;
+  border-radius:8px;
+  padding:5px;
+  overflow:hidden;
 }
 
 .dayCell.otherMonth {
-  opacity:
-    .32;
+  opacity:.32;
 }
 
 .dayCell.todayCell {
-  outline:
-    2px solid #007aff;
+  outline:2px solid #007aff;
 }
 
 .dayNumber {
-  font-size:
-    12px;
-
-  font-weight:
-    800;
-
-  margin-bottom:
-    4px;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:4px;
 }
 
 .calTodo {
-  border-radius:
-    5px;
-
-  padding:
-    3px 4px;
-
-  margin-bottom:
-    3px;
-
-  font-size:
-    10px;
-
-  line-height:
-    1.25;
-
-  background:
-    #ffdada;
-
-  overflow:
-    hidden;
-
-  cursor:
-    pointer;
+  border-radius:5px;
+  padding:3px 4px;
+  margin-bottom:3px;
+  font-size:10px;
+  line-height:1.25;
+  background:#ffdada;
+  overflow:hidden;
 }
 
 .calTodo.completed {
-  opacity:
-    .45;
-
-  text-decoration:
-    line-through;
-}
-
-.calPatient {
-  font-weight:
-    800;
+  opacity:.45;
+  text-decoration:line-through;
 }
 
 .moreLabel {
-  font-size:
-    10px;
-
-  color:
-    #666;
-
-  font-weight:
-    700;
+  font-size:10px;
+  color:#666;
+  font-weight:700;
 }
 
-.undatedBox {
-  background:
-    white;
-
-  border-radius:
-    13px;
-
-  padding:
-    10px;
-
-  margin-top:
-    12px;
+.handoffOverlay {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:#f2f2f7;
+  overflow:auto;
+  padding-top:env(safe-area-inset-top);
 }
 
-.undatedTitle {
-  font-weight:
-    800;
-
-  margin-bottom:
-    7px;
+.handoffHeader {
+  position:sticky;
+  top:0;
+  background:white;
+  border-bottom:1px solid #ddd;
+  padding:10px;
+  z-index:2;
 }
 
-.undatedItem {
-  padding:
-    7px 3px;
-
-  border-bottom:
-    1px solid #eee;
-
-  font-size:
-    14px;
+.handoffBody {
+  padding:12px;
+  max-width:850px;
+  margin:auto;
+  padding-bottom:40px;
 }
 
+.handoffTextarea {
+  width:100%;
+  min-height:70vh;
+  border:1px solid #bbb;
+  border-radius:12px;
+  padding:12px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:14px;
+  line-height:1.45;
+  resize:vertical;
+}
+
+#outpatientView,
 #bloodView,
 #calendarView {
-  display:
-    none;
+  display:none;
 }
 
-/* =========================
-   iPhone
-========================= */
-
 @media(max-width:550px) {
+  .tabs {
+    font-size:11px;
+  }
+
+  .patientTop {
+    grid-template-columns:74px 1fr auto;
+  }
 
   .todoEntry {
-    grid-template-columns:
-      1fr 1fr;
+    grid-template-columns:1fr 1fr;
   }
 
   .todoEntry .todoTextInput {
-    grid-column:
-      1 / 3;
-  }
-
-  .todoEntry .dateInput {
-    grid-column:
-      1;
-  }
-
-  .todoEntry button {
-    grid-column:
-      2;
+    grid-column:1 / 3;
   }
 
   .dayCell {
-    min-height:
-      88px;
-
-    padding:
-      4px 3px;
+    min-height:86px;
+    padding:4px 3px;
   }
 
   .calTodo {
-    font-size:
-      9px;
+    font-size:9px;
+  }
 
-    padding:
-      3px;
+  .formRow {
+    grid-template-columns:65px 1fr;
+  }
+
+  .formRow > :last-child.badge,
+  .formRow > button {
+    grid-column:2;
   }
 }
-
 </style>
 </head>
-
 
 <body>
 
 <header>
-
   <div class="headerTop">
-
-    <h1>
-      病棟 ToDo
-    </h1>
-
-    <button
-      class="blue"
-      onclick="addPatient()"
-    >
-      ＋患者
-    </button>
-
+    <h1>病棟 ToDo</h1>
+    <button class="blue" onclick="addPatientFromCurrentTab()">＋患者</button>
   </div>
-
 
   <div class="tabs">
-
-    <button
-      id="patientTabButton"
-      class="tabButton active"
-      onclick="showTab('patients')"
-    >
-      患者一覧
-    </button>
-
-    <button
-      id="bloodTabButton"
-      class="tabButton"
-      onclick="showTab('blood')"
-    >
-      採血
-    </button>
-
-    <button
-      id="calendarTabButton"
-      class="tabButton"
-      onclick="showTab('calendar')"
-    >
-      カレンダー
-    </button>
-
+    <button id="wardTabButton" class="tabButton active" onclick="showTab('ward')">病棟患者</button>
+    <button id="outpatientTabButton" class="tabButton" onclick="showTab('outpatient')">外来患者</button>
+    <button id="bloodTabButton" class="tabButton" onclick="showTab('blood')">採血</button>
+    <button id="calendarTabButton" class="tabButton" onclick="showTab('calendar')">カレンダー</button>
   </div>
-
 </header>
-
 
 <main>
 
-
-<!-- =========================
-     患者一覧
-========================= -->
-
-<section id="patientView">
-
+<section id="wardView">
   <div class="toolbar">
-
-    <button
-      class="gray"
-      onclick="deleteCompletedTodos()"
-    >
-      ✓ 完了ToDo削除
-    </button>
-
-    <button
-      class="red"
-      onclick="deleteFinishedPatients()"
-    >
-      完了患者一括削除
-    </button>
-
+    <button class="gray" onclick="sortWardByRoom()">部屋順ソート</button>
+    <button class="blue" onclick="openHandoff()">申し送り作成</button>
+    <button class="gray" onclick="deleteCompletedTodos()">✓ 完了ToDo削除</button>
   </div>
 
-
   <div class="toolbar">
-
-    <button
-      class="gray"
-      onclick="backupData()"
-    >
-      バックアップ保存
-    </button>
-
-    <button
-      class="gray"
-      onclick="
-        document
-        .getElementById('restoreFile')
-        .click()
-      "
-    >
-      バックアップ復元
-    </button>
+    <button class="red" onclick="deleteFinishedPatients()">完了患者削除</button>
+    <button class="gray" onclick="backupData()">バックアップ保存</button>
+    <button class="gray" onclick="document.getElementById('restoreFile').click()">バックアップ復元</button>
 
     <input
       id="restoreFile"
@@ -1001,176 +512,102 @@ main {
       accept=".json,application/json"
       style="display:none"
     >
-
   </div>
 
-
-  <div id="patients">
-  </div>
-
-
-  <div
-    id="empty"
-    class="empty"
-  >
-    ＋患者 から追加してください
-  </div>
-
+  <div id="wardPatients"></div>
+  <div id="wardEmpty" class="empty">＋患者 から追加してください</div>
 </section>
 
 
-<!-- =========================
-     採血
-========================= -->
+<section id="outpatientView">
+  <div class="toolbar">
+    <button class="gray" onclick="backupData()">バックアップ保存</button>
+  </div>
+
+  <div id="outpatientPatients"></div>
+  <div id="outpatientEmpty" class="empty">外来患者はいません</div>
+</section>
+
 
 <section id="bloodView">
 
   <div class="card">
-
-    <div
-      style="
-        font-size:18px;
-        font-weight:800;
-        margin-bottom:4px;
-      "
-    >
-      今日の採血
+    <div class="sectionTitle">今日の採血</div>
+    <div class="smallText" style="margin-bottom:12px;">
+      患者を選択すると今日のToDoに「採血」を通常優先度で追加します。
     </div>
 
-    <div
-      style="
-        font-size:13px;
-        color:#666;
-        margin-bottom:12px;
-      "
-    >
-      既存患者から選択して
-      今日のToDoに「採血」を追加します
-    </div>
-
-
-    <div class="bloodTop">
-
-      <button
-        class="gray"
-        onclick="selectAllBlood()"
-      >
-        全選択
+    <div class="subTabs">
+      <button id="bloodWardButton" class="subTab active" onclick="switchBloodGroup('ward')">
+        入院
       </button>
 
-      <button
-        class="gray"
-        onclick="clearAllBlood()"
-      >
-        全解除
+      <button id="bloodOutpatientButton" class="subTab" onclick="switchBloodGroup('outpatient')">
+        外来
       </button>
-
     </div>
 
-
-    <div id="bloodPatientList">
+    <div class="toolbar">
+      <button class="gray" onclick="selectAllBlood()">全選択</button>
+      <button class="gray" onclick="clearAllBlood()">全解除</button>
     </div>
 
+    <div id="bloodPatientList"></div>
 
     <button
-      class="blue bloodAddButton"
+      class="blue"
+      style="width:100%;margin-top:12px;padding:11px;"
       onclick="addBloodTodos()"
     >
       選択患者に採血ToDoを追加
     </button>
-
   </div>
 
 </section>
 
-
-<!-- =========================
-     カレンダー
-========================= -->
 
 <section id="calendarView">
 
   <div class="calendarHeader">
-
-    <button
-      class="gray"
-      onclick="changeMonth(-1)"
-    >
-      ‹
-    </button>
-
-    <div
-      id="calendarTitle"
-      class="calendarTitle"
-    >
-    </div>
-
-    <button
-      class="gray"
-      onclick="changeMonth(1)"
-    >
-      ›
-    </button>
-
+    <button class="gray" onclick="changeMonth(-1)">‹</button>
+    <div id="calendarTitle" class="calendarTitle"></div>
+    <button class="gray" onclick="changeMonth(1)">›</button>
   </div>
-
 
   <div class="toolbar">
-
-    <button
-      class="gray"
-      onclick="goToday()"
-    >
-      今月
-    </button>
-
+    <button class="gray" onclick="goToday()">今月</button>
   </div>
 
-
-  <div class="calendarNote">
-    カレンダーには
-    優先度「高」のToDoのみ表示します
+  <div class="smallText" style="margin-bottom:10px;">
+    優先度「高」のToDoのみ表示します。
   </div>
-
 
   <div class="weekHeader">
-
-    <div>日</div>
-    <div>月</div>
-    <div>火</div>
-    <div>水</div>
-    <div>木</div>
-    <div>金</div>
-    <div>土</div>
-
+    <div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>
   </div>
 
-
-  <div
-    id="calendarGrid"
-    class="calendarGrid"
-  >
-  </div>
-
-
-  <div
-    id="undatedBox"
-    class="undatedBox"
-  >
-
-    <div class="undatedTitle">
-      日付未設定の優先度「高」
-    </div>
-
-    <div id="undatedList">
-    </div>
-
-  </div>
+  <div id="calendarGrid" class="calendarGrid"></div>
 
 </section>
 
-
 </main>
+
+
+<div id="handoffOverlay" class="handoffOverlay">
+
+  <div class="handoffHeader">
+    <div class="toolbar" style="margin:0;">
+      <button class="gray" onclick="closeHandoff()">← 戻る</button>
+      <button class="blue" onclick="generateHandoff()">再生成</button>
+      <button class="green" onclick="copyHandoff()">全文コピー</button>
+    </div>
+  </div>
+
+  <div class="handoffBody">
+    <textarea id="handoffText" class="handoffTextarea"></textarea>
+  </div>
+
+</div>
 
 
 <script>
@@ -1179,207 +616,173 @@ main {
    基本
 ========================================= */
 
-const KEY =
-  "hospiTodo";
+const KEY = "hospiTodo";
+
+let activeMainTab = "ward";
+let bloodGroup = "ward";
 
 
 function uid() {
-
-  return (
-    Date.now().toString(36) +
-    Math.random()
-      .toString(36)
-      .slice(2,8)
-  );
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
 }
 
 
 function formatDateLocal(date) {
-
-  const y =
-    date.getFullYear();
-
-  const m =
-    String(
-      date.getMonth() + 1
-    ).padStart(2,"0");
-
-  const d =
-    String(
-      date.getDate()
-    ).padStart(2,"0");
-
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,"0");
+  const d = String(date.getDate()).padStart(2,"0");
   return `${y}-${m}-${d}`;
 }
 
 
 function todayString() {
-
-  return formatDateLocal(
-    new Date()
-  );
+  return formatDateLocal(new Date());
 }
 
 
 function tomorrowString() {
-
-  const d =
-    new Date();
-
-  d.setDate(
-    d.getDate() + 1
-  );
-
+  const d = new Date();
+  d.setDate(d.getDate()+1);
   return formatDateLocal(d);
 }
 
 
+function displayDate(s) {
+  if(!s) return "";
+
+  const a = s.split("-");
+
+  if(a.length !== 3) return s;
+
+  return String(a[1]).padStart(2,"0") + "/" + String(a[2]).padStart(2,"0");
+}
+
+
+function defaultDateState() {
+  return {
+    date:"",
+    noPlan:false
+  };
+}
+
+
+function normalizeDateState(value) {
+
+  if(typeof value === "string") {
+    return {
+      date:value,
+      noPlan:false
+    };
+  }
+
+  return {
+    date:value?.date || "",
+    noPlan:!!value?.noPlan
+  };
+}
+
+
 /* =========================================
-   読み込み
+   データ読込・移行
 ========================================= */
 
 let patients = [];
 
 try {
-
-  patients =
-    JSON.parse(
-      localStorage.getItem(KEY)
-    ) || [];
-
+  patients = JSON.parse(localStorage.getItem(KEY)) || [];
 } catch(e) {
-
   patients = [];
 }
 
 
-/* =========================================
-   旧データ互換
-========================================= */
-
 function normalizePatients(data) {
 
-  return (data || [])
-    .map(p => {
+  return (data || []).map(p => {
 
-      const defaultOrders = {
+    const oldOrders = p.orders || {};
 
-        blood: "",
+    const orders = {
+      blood:normalizeDateState(oldOrders.blood),
+      drip:normalizeDateState(oldOrders.drip),
+      procedure:normalizeDateState(oldOrders.procedure),
+      prescription:normalizeDateState(oldOrders.prescription)
+    };
 
-        drip: "",
+    const todos = (p.todos || []).map(t => {
 
-        procedure: "",
+      let dueDate = t.dueDate || "";
 
-        prescription: ""
-      };
-
-
-      const orders = {
-
-        ...defaultOrders,
-
-        ...(p.orders || {})
-      };
-
-
-      const todos =
-        (p.todos || [])
-        .map(t => {
-
-          let dueDate =
-            t.dueDate || "";
-
-          /*
-            旧形式
-            今日・明日・後日
-            から変換
-          */
-
-          if(!dueDate) {
-
-            if(
-              t.timing === "today"
-            ) {
-
-              dueDate =
-                todayString();
-
-            } else if(
-              t.timing ===
-              "tomorrow"
-            ) {
-
-              dueDate =
-                tomorrowString();
-            }
-          }
-
-
-          return {
-
-            id:
-              String(
-                t.id || uid()
-              ),
-
-            text:
-              t.text || "",
-
-            done:
-              !!t.done,
-
-            priority:
-              t.priority ||
-              "normal",
-
-            dueDate:
-              dueDate
-          };
-        });
-
+      if(!dueDate) {
+        if(t.timing === "today") {
+          dueDate = todayString();
+        } else if(t.timing === "tomorrow") {
+          dueDate = tomorrowString();
+        }
+      }
 
       return {
-
-        id:
-          String(
-            p.id || uid()
-          ),
-
-        room:
-          p.room || "",
-
-        initial:
-          p.initial || "",
-
-        finished:
-          !!p.finished,
-
-        orders:
-          orders,
-
-        todos:
-          todos
+        id:String(t.id || uid()),
+        text:t.text || "",
+        done:!!t.done,
+        priority:t.priority || "normal",
+        dueDate
       };
     });
+
+    return {
+      id:String(p.id || uid()),
+
+      location:
+        p.location === "outpatient"
+          ? "outpatient"
+          : "ward",
+
+      room:p.room || "",
+      initial:p.initial || "",
+      finished:!!p.finished,
+
+      admissionDate:p.admissionDate || "",
+      dischargeDate:p.dischargeDate || "",
+
+      plannedAdmission:
+        normalizeDateState(
+          p.plannedAdmission ||
+          p.admissionPlan
+        ),
+
+      plannedAdmissionRoom:
+        p.plannedAdmissionRoom || "",
+
+      plannedDischarge:
+        normalizeDateState(
+          p.plannedDischarge ||
+          p.dischargePlan
+        ),
+
+      orders,
+      todos,
+
+      handoff:{
+        regimen:p.handoff?.regimen || "",
+        mood:p.handoff?.mood || "",
+        note:p.handoff?.note || "",
+        category:
+          p.handoff?.category === "consult"
+            ? "consult"
+            : "ward"
+      }
+    };
+  });
 }
 
 
-patients =
-  normalizePatients(
-    patients
-  );
+patients = normalizePatients(patients);
+save();
 
 
 function save() {
-
-  localStorage.setItem(
-    KEY,
-    JSON.stringify(patients)
-  );
+  localStorage.setItem(KEY,JSON.stringify(patients));
 }
-
-
-save();
 
 
 /* =========================================
@@ -1388,271 +791,131 @@ save();
 
 function showTab(tab) {
 
-  const patientView =
-    document.getElementById(
-      "patientView"
-    );
+  activeMainTab = tab;
 
-  const bloodView =
-    document.getElementById(
-      "bloodView"
-    );
+  const views = {
+    ward:"wardView",
+    outpatient:"outpatientView",
+    blood:"bloodView",
+    calendar:"calendarView"
+  };
 
-  const calendarView =
-    document.getElementById(
-      "calendarView"
-    );
+  const buttons = {
+    ward:"wardTabButton",
+    outpatient:"outpatientTabButton",
+    blood:"bloodTabButton",
+    calendar:"calendarTabButton"
+  };
 
+  Object.values(views).forEach(id => {
+    document.getElementById(id).style.display = "none";
+  });
 
-  const patientButton =
-    document.getElementById(
-      "patientTabButton"
-    );
+  Object.values(buttons).forEach(id => {
+    document.getElementById(id).classList.remove("active");
+  });
 
-  const bloodButton =
-    document.getElementById(
-      "bloodTabButton"
-    );
+  document.getElementById(views[tab]).style.display = "block";
+  document.getElementById(buttons[tab]).classList.add("active");
 
-  const calendarButton =
-    document.getElementById(
-      "calendarTabButton"
-    );
-
-
-  patientView.style.display =
-    "none";
-
-  bloodView.style.display =
-    "none";
-
-  calendarView.style.display =
-    "none";
-
-
-  patientButton.classList
-    .remove("active");
-
-  bloodButton.classList
-    .remove("active");
-
-  calendarButton.classList
-    .remove("active");
-
-
-  if(
-    tab === "blood"
-  ) {
-
-    bloodView.style.display =
-      "block";
-
-    bloodButton.classList
-      .add("active");
-
-    renderBloodPatients();
-
-    return;
-  }
-
-
-  if(
-    tab === "calendar"
-  ) {
-
-    calendarView.style.display =
-      "block";
-
-    calendarButton.classList
-      .add("active");
-
-    renderCalendar();
-
-    return;
-  }
-
-
-  patientView.style.display =
-    "block";
-
-  patientButton.classList
-    .add("active");
-
-  render();
+  if(tab === "ward") renderWard();
+  if(tab === "outpatient") renderOutpatient();
+  if(tab === "blood") renderBloodPatients();
+  if(tab === "calendar") renderCalendar();
 }
 
 
 /* =========================================
-   患者
+   患者追加・基本
 ========================================= */
 
-function addPatient() {
+function newPatient(location) {
 
-  patients.push({
+  return {
+    id:uid(),
+    location,
+    room:"",
+    initial:"",
+    finished:false,
 
-    id:
-      uid(),
+    admissionDate:"",
+    dischargeDate:"",
 
-    room:
-      "",
+    plannedAdmission:defaultDateState(),
+    plannedAdmissionRoom:"",
 
-    initial:
-      "",
+    plannedDischarge:defaultDateState(),
 
-    finished:
-      false,
-
-    orders: {
-
-      blood:
-        "",
-
-      drip:
-        "",
-
-      procedure:
-        "",
-
-      prescription:
-        ""
+    orders:{
+      blood:defaultDateState(),
+      drip:defaultDateState(),
+      procedure:defaultDateState(),
+      prescription:defaultDateState()
     },
 
-    todos:
-      []
-  });
+    todos:[],
 
+    handoff:{
+      regimen:"",
+      mood:"",
+      note:"",
+      category:"ward"
+    }
+  };
+}
+
+
+function addPatientFromCurrentTab() {
+
+  let location =
+    activeMainTab === "outpatient"
+      ? "outpatient"
+      : "ward";
+
+  patients.push(
+    newPatient(location)
+  );
 
   save();
 
-  showTab(
-    "patients"
-  );
+  showTab(location);
+}
 
 
-  setTimeout(() => {
+function updatePatient(id,key,value) {
 
-    const cards =
-      document.querySelectorAll(
-        ".card.patientCard"
-      );
+  const p = patients.find(p => p.id === id);
 
-    const last =
-      cards[
-        cards.length - 1
-      ];
+  if(!p) return;
 
-    last?.scrollIntoView({
+  p[key] = value;
 
-      behavior:
-        "smooth",
-
-      block:
-        "center"
-    });
-
-  },50);
+  save();
 }
 
 
 function deletePatient(id) {
 
-  if(
-    !confirm(
-      "この患者を削除しますか？"
-    )
-  ) return;
+  if(!confirm("この患者を削除しますか？")) return;
 
-
-  patients =
-    patients.filter(
-      p => p.id !== id
-    );
-
+  patients = patients.filter(p => p.id !== id);
 
   save();
 
-  render();
-}
-
-
-function movePatient(
-  id,
-  dir
-) {
-
-  const i =
-    patients.findIndex(
-      p => p.id === id
-    );
-
-
-  const j =
-    i + dir;
-
-
-  if(
-    i < 0 ||
-    j < 0 ||
-    j >= patients.length
-  ) return;
-
-
-  [
-    patients[i],
-    patients[j]
-  ] = [
-    patients[j],
-    patients[i]
-  ];
-
-
-  save();
-
-  render();
-}
-
-
-function updatePatient(
-  id,
-  key,
-  value
-) {
-
-  const p =
-    patients.find(
-      p => p.id === id
-    );
-
-
-  if(!p) return;
-
-
-  p[key] =
-    value;
-
-
-  save();
+  renderAll();
 }
 
 
 function toggleFinished(id) {
 
-  const p =
-    patients.find(
-      p => p.id === id
-    );
-
+  const p = patients.find(p => p.id === id);
 
   if(!p) return;
 
-
-  p.finished =
-    !p.finished;
-
+  p.finished = !p.finished;
 
   save();
-
-  render();
+  renderWard();
 }
 
 
@@ -1660,166 +923,257 @@ function deleteFinishedPatients() {
 
   const count =
     patients.filter(
-      p => p.finished
+      p =>
+        p.location === "ward" &&
+        p.finished
     ).length;
 
-
   if(!count) {
-
-    alert(
-      "完了患者はいません"
-    );
-
+    alert("完了患者はいません");
     return;
   }
 
-
-  if(
-    !confirm(
-      "完了患者 " +
-      count +
-      "名を削除しますか？"
-    )
-  ) return;
-
+  if(!confirm(`完了患者 ${count}名を削除しますか？`)) return;
 
   patients =
     patients.filter(
-      p => !p.finished
+      p =>
+        !(p.location === "ward" && p.finished)
     );
 
-
   save();
-
-  render();
+  renderWard();
 }
 
 
 /* =========================================
-   オーダー
+   病棟↔外来
 ========================================= */
 
-function updateOrder(
-  id,
-  type,
-  value
-) {
+function moveToOutpatient(id) {
 
-  const p =
-    patients.find(
-      p => p.id === id
-    );
-
+  const p = patients.find(p => p.id === id);
 
   if(!p) return;
 
+  if(!confirm("この患者を外来患者へ移動しますか？")) return;
 
-  p.orders[type] =
-    value;
+  p.location = "outpatient";
 
+  if(!p.dischargeDate) {
+    p.dischargeDate = todayString();
+  }
 
   save();
 
-  render();
+  renderAll();
 }
 
 
-function dateStatus(dateStr) {
+function moveToWard(id) {
 
-  if(!dateStr) {
+  const p = patients.find(p => p.id === id);
 
+  if(!p) return;
+
+  if(!confirm("この患者を病棟患者へ移動しますか？")) return;
+
+  p.location = "ward";
+
+  if(!p.admissionDate) {
+    p.admissionDate = todayString();
+  }
+
+  if(
+    p.plannedAdmission?.date &&
+    !p.room &&
+    p.plannedAdmissionRoom
+  ) {
+    p.room = p.plannedAdmissionRoom;
+  }
+
+  save();
+
+  renderAll();
+}
+
+
+/* =========================================
+   部屋順
+========================================= */
+
+function roomSortKey(room) {
+
+  const text = String(room || "").trim();
+
+  if(!text) return [999999,text];
+
+  const nums = text.match(/\d+/g);
+
+  if(nums?.length) {
+    return [
+      Number(nums.join("").slice(0,8)),
+      text
+    ];
+  }
+
+  return [999998,text];
+}
+
+
+function compareRooms(a,b) {
+
+  const ka = roomSortKey(a.room);
+  const kb = roomSortKey(b.room);
+
+  if(ka[0] !== kb[0]) {
+    return ka[0] - kb[0];
+  }
+
+  return ka[1].localeCompare(
+    kb[1],
+    "ja",
+    {numeric:true}
+  );
+}
+
+
+function sortWardByRoom() {
+
+  const ward =
+    patients
+      .filter(p => p.location === "ward")
+      .sort(compareRooms);
+
+  const outpatient =
+    patients.filter(
+      p => p.location === "outpatient"
+    );
+
+  patients = [
+    ...ward,
+    ...outpatient
+  ];
+
+  save();
+  renderWard();
+}
+
+
+/* =========================================
+   日付 / 予定なし
+========================================= */
+
+function updateDateState(id,group,key,date) {
+
+  const p = patients.find(p => p.id === id);
+
+  if(!p) return;
+
+  if(group === "orders") {
+
+    p.orders[key].date = date;
+    p.orders[key].noPlan = false;
+
+  } else {
+
+    p[key].date = date;
+    p[key].noPlan = false;
+  }
+
+  save();
+
+  if(activeMainTab === "ward") renderWard();
+  if(activeMainTab === "outpatient") renderOutpatient();
+}
+
+
+function toggleNoPlan(id,group,key) {
+
+  const p = patients.find(p => p.id === id);
+
+  if(!p) return;
+
+  let state;
+
+  if(group === "orders") {
+    state = p.orders[key];
+  } else {
+    state = p[key];
+  }
+
+  state.noPlan = !state.noPlan;
+
+  if(state.noPlan) {
+    state.date = "";
+  }
+
+  save();
+
+  if(activeMainTab === "ward") renderWard();
+  if(activeMainTab === "outpatient") renderOutpatient();
+}
+
+
+function dateStatus(state) {
+
+  state = normalizeDateState(state);
+
+  if(state.noPlan) {
     return {
-
-      text:
-        "未入力",
-
-      cls:
-        "none"
+      text:"予定なし",
+      cls:"noPlan"
     };
   }
 
+  if(!state.date) {
+    return {
+      text:"未入力",
+      cls:"none"
+    };
+  }
 
-  const today =
-    new Date();
+  const today = new Date();
+  today.setHours(0,0,0,0);
 
-  today.setHours(
-    0,0,0,0
+  const d = new Date(
+    state.date + "T00:00:00"
   );
 
+  const diff = Math.round(
+    (d - today) / 86400000
+  );
 
-  const d =
-    new Date(
-      dateStr +
-      "T00:00:00"
-    );
-
-
-  const diff =
-    Math.round(
-      (d - today) /
-      86400000
-    );
-
-
-  if(
-    diff < 0
-  ) {
-
+  if(diff < 0) {
     return {
-
-      text:
-        "期限切れ",
-
-      cls:
-        "expired"
+      text:"期限切れ",
+      cls:"expired"
     };
   }
 
-
-  if(
-    diff === 0
-  ) {
-
+  if(diff === 0) {
     return {
-
-      text:
-        "今日まで",
-
-      cls:
-        "today"
+      text:"今日",
+      cls:"today"
     };
   }
 
-
-  if(
-    diff === 1
-  ) {
-
+  if(diff === 1) {
     return {
-
-      text:
-        "明日まで",
-
-      cls:
-        "tomorrow"
+      text:"明日",
+      cls:"tomorrow"
     };
   }
-
 
   return {
-
-    text:
-      diff +
-      "日先まで",
-
-    cls:
-      "safe"
+    text:`${diff}日先`,
+    cls:"safe"
   };
 }
 
 
 /* =========================================
-   Todo
+   ToDo
 ========================================= */
 
 function addTodo(id) {
@@ -1829,57 +1183,49 @@ function addTodo(id) {
       "text-" + id
     );
 
-
   const priorityEl =
     document.getElementById(
       "priority-" + id
     );
-
 
   const dateEl =
     document.getElementById(
       "date-" + id
     );
 
+  if(!textEl) return;
 
   const text =
     textEl.value.trim();
 
-
   if(!text) return;
-
 
   const p =
     patients.find(
       p => p.id === id
     );
 
-
   if(!p) return;
 
-
   p.todos.push({
-
-    id:
-      uid(),
-
-    text:
-      text,
-
-    done:
-      false,
-
+    id:uid(),
+    text,
+    done:false,
     priority:
-      priorityEl.value,
-
+      priorityEl?.value ||
+      "normal",
     dueDate:
-      dateEl.value
+      dateEl?.value ||
+      todayString()
   });
-
 
   save();
 
-  render();
+  if(p.location === "ward") {
+    renderWard();
+  } else {
+    renderOutpatient();
+  }
 }
 
 
@@ -1890,35 +1236,22 @@ function toggleTodo(
 
   const p =
     patients.find(
-      p =>
-        p.id ===
-        patientId
+      p => p.id === patientId
     );
-
 
   if(!p) return;
 
-
   const t =
     p.todos.find(
-      t =>
-        t.id ===
-        todoId
+      t => t.id === todoId
     );
-
 
   if(!t) return;
 
-
-  t.done =
-    !t.done;
-
+  t.done = !t.done;
 
   save();
-
-  render();
-
-  renderCalendar();
+  renderAll();
 }
 
 
@@ -1929,26 +1262,18 @@ function deleteTodo(
 
   const p =
     patients.find(
-      p =>
-        p.id ===
-        patientId
+      p => p.id === patientId
     );
-
 
   if(!p) return;
 
-
   p.todos =
     p.todos.filter(
-      t =>
-        t.id !==
-        todoId
+      t => t.id !== todoId
     );
 
-
   save();
-
-  render();
+  renderAll();
 }
 
 
@@ -1956,75 +1281,37 @@ function deleteCompletedTodos() {
 
   const count =
     patients.reduce(
-
       (n,p) =>
         n +
         p.todos.filter(
           t => t.done
         ).length,
-
       0
     );
 
-
   if(!count) {
-
-    alert(
-      "完了済みToDoはありません"
-    );
-
+    alert("完了済みToDoはありません");
     return;
   }
 
-
-  if(
-    !confirm(
-      "完了済みToDo " +
-      count +
-      "件を削除しますか？"
-    )
-  ) return;
-
+  if(!confirm(`完了済みToDo ${count}件を削除しますか？`)) return;
 
   patients.forEach(p => {
-
     p.todos =
       p.todos.filter(
         t => !t.done
       );
   });
 
-
   save();
-
-  render();
+  renderAll();
 }
 
 
-/* =========================================
-   ToDo 日付表示
-========================================= */
-
-function displayDate(s) {
-
-  if(!s)
-    return "";
-
-
-  const parts =
-    s.split("-");
-
-
-  if(
-    parts.length !== 3
-  ) return s;
-
-
-  return (
-    Number(parts[1]) +
-    "/" +
-    Number(parts[2])
-  );
+function priorityText(v) {
+  if(v === "high") return "高";
+  if(v === "low") return "低";
+  return "通常";
 }
 
 
@@ -2034,102 +1321,46 @@ function todoDateText(
 ) {
 
   if(!dateStr) {
-
     return {
-
-      text:
-        "日付未設定",
-
-      cls:
-        "dateTag"
+      text:"日付未設定",
+      cls:"dateTag"
     };
   }
-
 
   const today =
     todayString();
 
-
-  const tomorrow =
-    tomorrowString();
-
-
-  if(
-    dateStr === today
-  ) {
-
+  if(dateStr === today) {
     return {
-
-      text:
-        "今日",
-
-      cls:
-        "dateTag"
+      text:"今日",
+      cls:"dateTag"
     };
   }
-
 
   if(
     dateStr ===
-    tomorrow
+    tomorrowString()
   ) {
-
     return {
-
-      text:
-        "明日",
-
-      cls:
-        "dateTag"
+      text:"明日",
+      cls:"dateTag"
     };
   }
-
 
   if(
     dateStr < today &&
     !done
   ) {
-
     return {
-
-      text:
-        "期限超過 " +
-        displayDate(
-          dateStr
-        ),
-
-      cls:
-        "overdueTag"
+      text:"期限超過 " + displayDate(dateStr),
+      cls:"overdueTag"
     };
   }
 
-
   return {
-
-    text:
-      displayDate(
-        dateStr
-      ),
-
-    cls:
-      "dateTag"
+    text:displayDate(dateStr),
+    cls:"dateTag"
   };
-}
-
-
-function priorityText(v) {
-
-  if(
-    v === "high"
-  ) return "高";
-
-
-  if(
-    v === "low"
-  ) return "低";
-
-
-  return "通常";
 }
 
 
@@ -2137,18 +1368,38 @@ function priorityText(v) {
    採血
 ========================================= */
 
+function switchBloodGroup(group) {
+
+  bloodGroup = group;
+
+  document
+    .getElementById("bloodWardButton")
+    .classList
+    .toggle(
+      "active",
+      group === "ward"
+    );
+
+  document
+    .getElementById("bloodOutpatientButton")
+    .classList
+    .toggle(
+      "active",
+      group === "outpatient"
+    );
+
+  renderBloodPatients();
+}
+
+
 function hasTodayBloodTodo(p) {
 
   const today =
     todayString();
 
-
   return p.todos.some(t =>
-
     t.text === "採血" &&
-
     t.dueDate === today &&
-
     !t.done
   );
 }
@@ -2156,147 +1407,103 @@ function hasTodayBloodTodo(p) {
 
 function renderBloodPatients() {
 
-  const container =
+  const box =
     document.getElementById(
       "bloodPatientList"
     );
 
+  box.innerHTML = "";
 
-  container.innerHTML =
-    "";
-
-
-  const activePatients =
+  const list =
     patients.filter(
-      p => !p.finished
+      p =>
+        p.location === bloodGroup &&
+        !p.finished
     );
 
+  if(!list.length) {
 
-  if(
-    !activePatients.length
-  ) {
-
-    container.innerHTML =
-      `
-      <div
-        style="
-          color:#888;
-          padding:15px 0;
-        "
-      >
-        患者がいません
-      </div>
-      `;
+    box.innerHTML =
+      `<div class="smallText" style="padding:15px 0;">患者がいません</div>`;
 
     return;
   }
 
-
-  activePatients.forEach(p => {
+  list.forEach(p => {
 
     const registered =
       hasTodayBloodTodo(p);
-
 
     const row =
       document.createElement(
         "label"
       );
 
-
     row.className =
       "bloodPatientRow";
 
-
-    const checkbox =
+    const check =
       document.createElement(
         "input"
       );
 
-
-    checkbox.type =
+    check.type =
       "checkbox";
 
-
-    checkbox.className =
+    check.className =
       "bloodPatientCheck";
 
-
-    checkbox.value =
+    check.value =
       p.id;
 
-
-    if(
-      registered
-    ) {
-
-      checkbox.disabled =
-        true;
+    if(registered) {
+      check.disabled = true;
     }
-
 
     const text =
       document.createElement(
         "div"
       );
 
-
     text.className =
       "bloodPatientName";
 
+    let prefix = "";
 
-    const name =
-      (
-        p.room
-          ? p.room + " "
-          : ""
-      ) +
+    if(
+      p.location === "ward" &&
+      p.room
+    ) {
+      prefix =
+        p.room + " ";
+    }
+
+    text.textContent =
+      prefix +
       (
         p.initial ||
         "名称未入力"
       );
-
-
-    text.textContent =
-      name;
-
 
     const status =
       document.createElement(
         "div"
       );
 
-
-    if(
-      registered
-    ) {
-
+    if(registered) {
       status.className =
         "registeredBadge";
-
       status.textContent =
         "登録済";
     }
 
-
-    row.appendChild(
-      checkbox
-    );
-
-
-    row.appendChild(
-      text
-    );
-
-
-    row.appendChild(
+    row.append(
+      check,
+      text,
       status
     );
 
-
-    container.appendChild(
-      row
-    );
+    box.appendChild(row);
   });
 }
 
@@ -2308,9 +1515,7 @@ function selectAllBlood() {
       ".bloodPatientCheck:not(:disabled)"
     )
     .forEach(el => {
-
-      el.checked =
-        true;
+      el.checked = true;
     });
 }
 
@@ -2322,131 +1527,1264 @@ function clearAllBlood() {
       ".bloodPatientCheck"
     )
     .forEach(el => {
-
-      el.checked =
-        false;
+      el.checked = false;
     });
 }
 
 
 function addBloodTodos() {
 
-  const checks =
+  const selected =
     document.querySelectorAll(
       ".bloodPatientCheck:checked"
     );
 
-
-  if(
-    !checks.length
-  ) {
-
-    alert(
-      "採血する患者を選択してください"
-    );
-
+  if(!selected.length) {
+    alert("採血する患者を選択してください");
     return;
   }
-
 
   const today =
     todayString();
 
+  let added = 0;
 
-  let added =
-    0;
+  selected.forEach(check => {
 
+    const p =
+      patients.find(
+        p => p.id === check.value
+      );
 
-  let skipped =
-    0;
+    if(!p) return;
 
+    if(hasTodayBloodTodo(p)) {
+      return;
+    }
 
-  checks.forEach(
-    check => {
-
-      const p =
-        patients.find(
-          p =>
-            p.id ===
-            check.value
-        );
-
-
-      if(!p)
-        return;
-
-
-      const exists =
-        p.todos.some(t =>
-
-          t.text ===
-            "採血" &&
-
-          t.dueDate ===
-            today &&
-
-          !t.done
-        );
-
-
-      if(
-        exists
-      ) {
-
-        skipped++;
-
-        return;
-      }
-
-
-      p.todos.push({
-
-        id:
-          uid(),
-
-        text:
-          "採血",
-
-        done:
-          false,
-
-        priority:
-          "normal",
-
-        dueDate:
-          today
-      });
-
-
-      added++;
+    p.todos.push({
+      id:uid(),
+      text:"採血",
+      done:false,
+      priority:"normal",
+      dueDate:today
     });
 
+    added++;
+  });
 
   save();
-
-
   renderBloodPatients();
 
+  alert(
+    `${added}名に採血ToDoを追加しました`
+  );
+}
 
-  let message =
-    added +
-    "名に採血ToDoを追加しました";
+
+/* =========================================
+   申し送り情報
+========================================= */
+
+function updateHandoff(
+  id,
+  key,
+  value
+) {
+
+  const p =
+    patients.find(
+      p => p.id === id
+    );
+
+  if(!p) return;
+
+  p.handoff[key] =
+    value;
+
+  save();
+}
 
 
-  if(
-    skipped
-  ) {
+/* =========================================
+   HTML
+========================================= */
 
-    message +=
-      "\n" +
-      skipped +
-      "名は登録済みです";
+function escapeHTML(str) {
+
+  return String(str ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function makeDateStateHTML(
+  p,
+  group,
+  key,
+  label
+) {
+
+  const state =
+    group === "orders"
+      ? p.orders[key]
+      : p[key];
+
+  const status =
+    dateStatus(state);
+
+  return `
+    <div class="formRow">
+
+      <div>${label}</div>
+
+      <input
+        type="date"
+        value="${state.date || ""}"
+        ${state.noPlan ? "disabled" : ""}
+        onchange="
+          updateDateState(
+            '${p.id}',
+            '${group}',
+            '${key}',
+            this.value
+          )
+        "
+      >
+
+      <div>
+        <button
+          class="${state.noPlan ? "orange" : "gray"}"
+          onclick="
+            toggleNoPlan(
+              '${p.id}',
+              '${group}',
+              '${key}'
+            )
+          "
+        >
+          予定なし
+        </button>
+
+        <span
+          class="badge ${status.cls}"
+          style="margin-left:4px;"
+        >
+          ${status.text}
+        </span>
+      </div>
+
+    </div>
+  `;
+}
+
+
+function makeTodosHTML(p) {
+
+  let html = "";
+
+  p.todos.forEach(t => {
+
+    const dateInfo =
+      todoDateText(
+        t.dueDate,
+        t.done
+      );
+
+    html += `
+      <div class="todo">
+
+        <div class="todoMain">
+
+          <input
+            type="checkbox"
+            ${t.done ? "checked" : ""}
+            onchange="
+              toggleTodo(
+                '${p.id}',
+                '${t.id}'
+              )
+            "
+          >
+
+          <div
+            class="todoText ${t.done ? "done" : ""}"
+          >
+            ${escapeHTML(t.text)}
+          </div>
+
+          <button
+            class="red"
+            onclick="
+              deleteTodo(
+                '${p.id}',
+                '${t.id}'
+              )
+            "
+          >
+            ×
+          </button>
+
+        </div>
+
+        <div class="todoMeta">
+
+          <span class="tag ${t.priority}">
+            ${priorityText(t.priority)}
+          </span>
+
+          <span class="tag ${dateInfo.cls}">
+            ${dateInfo.text}
+          </span>
+
+        </div>
+
+      </div>
+    `;
+  });
+
+  return html;
+}
+
+
+function makeTodoEntryHTML(p) {
+
+  return `
+    <div class="todoEntry">
+
+      <input
+        id="text-${p.id}"
+        class="todoTextInput"
+        placeholder="ToDo"
+      >
+
+      <select id="priority-${p.id}">
+        <option value="high">高</option>
+        <option value="normal" selected>通常</option>
+        <option value="low">低</option>
+      </select>
+
+      <input
+        id="date-${p.id}"
+        type="date"
+        value="${todayString()}"
+      >
+
+      <button
+        class="blue"
+        onclick="addTodo('${p.id}')"
+      >
+        追加
+      </button>
+
+    </div>
+  `;
+}
+
+
+/* =========================================
+   病棟患者表示
+========================================= */
+
+function renderWard() {
+
+  const box =
+    document.getElementById(
+      "wardPatients"
+    );
+
+  const list =
+    patients.filter(
+      p => p.location === "ward"
+    );
+
+  box.innerHTML = "";
+
+  document
+    .getElementById("wardEmpty")
+    .style.display =
+      list.length
+        ? "none"
+        : "block";
+
+  list.forEach((p,index) => {
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+    card.className =
+      "card patientCard" +
+      (
+        p.finished
+          ? " finished"
+          : ""
+      );
+
+    card.id =
+      "patient-" + p.id;
+
+    const ordersHTML =
+      [
+        ["blood","採血"],
+        ["drip","点滴"],
+        ["procedure","処置"],
+        ["prescription","処方"]
+      ]
+      .map(([key,label]) =>
+        makeDateStateHTML(
+          p,
+          "orders",
+          key,
+          label
+        )
+      )
+      .join("");
+
+    card.innerHTML = `
+
+      <div class="patientTop">
+
+        <input
+          class="room"
+          placeholder="部屋"
+          value="${escapeHTML(p.room)}"
+          oninput="
+            updatePatient(
+              '${p.id}',
+              'room',
+              this.value
+            )
+          "
+        >
+
+        <input
+          class="patientName"
+          placeholder="イニシャル・疾患名"
+          value="${escapeHTML(p.initial)}"
+          oninput="
+            updatePatient(
+              '${p.id}',
+              'initial',
+              this.value
+            )
+          "
+        >
+
+        <div class="moveRow">
+          <span class="smallText">
+            ${index+1}
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="statusRow">
+
+        <button
+          class="${p.finished ? "green" : "gray"}"
+          onclick="toggleFinished('${p.id}')"
+        >
+          ${p.finished ? "✓ 患者完了" : "患者完了"}
+        </button>
+
+        <button
+          class="gray"
+          onclick="moveToOutpatient('${p.id}')"
+        >
+          外来へ移動
+        </button>
+
+        <button
+          class="red"
+          onclick="deletePatient('${p.id}')"
+        >
+          削除
+        </button>
+
+      </div>
+
+
+      <details class="detailsBox">
+
+        <summary>
+          入退院情報
+        </summary>
+
+        <div class="detailsContent">
+
+          <div class="formRow">
+            <div>入院日</div>
+
+            <input
+              type="date"
+              value="${p.admissionDate || ""}"
+              onchange="
+                updatePatient(
+                  '${p.id}',
+                  'admissionDate',
+                  this.value
+                )
+              "
+            >
+
+            <span></span>
+          </div>
+
+          ${makeDateStateHTML(
+            p,
+            "patient",
+            "plannedDischarge",
+            "退院予定"
+          )}
+
+        </div>
+
+      </details>
+
+
+      <details class="detailsBox">
+
+        <summary>
+          オーダー確認
+        </summary>
+
+        <div class="detailsContent">
+          ${ordersHTML}
+        </div>
+
+      </details>
+
+
+      <details class="detailsBox">
+
+        <summary>
+          申し送り情報
+        </summary>
+
+        <div class="detailsContent">
+
+          <div class="formRow">
+
+            <div>区分</div>
+
+            <select
+              onchange="
+                updateHandoff(
+                  '${p.id}',
+                  'category',
+                  this.value
+                )
+              "
+            >
+              <option
+                value="ward"
+                ${p.handoff.category === "ward" ? "selected" : ""}
+              >
+                病棟メンバー
+              </option>
+
+              <option
+                value="consult"
+                ${p.handoff.category === "consult" ? "selected" : ""}
+              >
+                兼科
+              </option>
+            </select>
+
+            <span></span>
+
+          </div>
+
+
+          <div class="formRow">
+
+            <div>治療</div>
+
+            <input
+              type="text"
+              placeholder="Axi-cel / HDAC など"
+              value="${escapeHTML(p.handoff.regimen)}"
+              oninput="
+                updateHandoff(
+                  '${p.id}',
+                  'regimen',
+                  this.value
+                )
+              "
+            >
+
+            <span></span>
+
+          </div>
+
+
+          <div class="formRow">
+
+            <div>状態</div>
+
+            <select
+              onchange="
+                updateHandoff(
+                  '${p.id}',
+                  'mood',
+                  this.value
+                )
+              "
+            >
+              <option value="" ${p.handoff.mood === "" ? "selected" : ""}>なし</option>
+              <option value="😀" ${p.handoff.mood === "😀" ? "selected" : ""}>😀</option>
+              <option value="😕" ${p.handoff.mood === "😕" ? "selected" : ""}>😕</option>
+              <option value="😢" ${p.handoff.mood === "😢" ? "selected" : ""}>😢</option>
+              <option value="🫠" ${p.handoff.mood === "🫠" ? "selected" : ""}>🫠</option>
+            </select>
+
+            <span></span>
+
+          </div>
+
+
+          <div class="formRow">
+
+            <div>本文</div>
+
+            <textarea
+              placeholder="申し送り本文"
+              oninput="
+                updateHandoff(
+                  '${p.id}',
+                  'note',
+                  this.value
+                )
+              "
+            >${escapeHTML(p.handoff.note)}</textarea>
+
+            <span></span>
+
+          </div>
+
+        </div>
+
+      </details>
+
+
+      ${makeTodosHTML(p)}
+
+      ${makeTodoEntryHTML(p)}
+    `;
+
+    box.appendChild(card);
+  });
+}
+
+
+/* =========================================
+   外来患者表示
+========================================= */
+
+function renderOutpatient() {
+
+  const box =
+    document.getElementById(
+      "outpatientPatients"
+    );
+
+  const list =
+    patients.filter(
+      p =>
+        p.location === "outpatient"
+    );
+
+  box.innerHTML = "";
+
+  document
+    .getElementById(
+      "outpatientEmpty"
+    )
+    .style.display =
+      list.length
+        ? "none"
+        : "block";
+
+  list.forEach(p => {
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+    card.className =
+      "card";
+
+    const ordersHTML =
+      [
+        ["blood","採血"],
+        ["drip","点滴"],
+        ["procedure","処置"],
+        ["prescription","処方"]
+      ]
+      .map(([key,label]) =>
+        makeDateStateHTML(
+          p,
+          "orders",
+          key,
+          label
+        )
+      )
+      .join("");
+
+    card.innerHTML = `
+
+      <div class="patientTop">
+
+        <input
+          class="room"
+          placeholder="予定病棟"
+          value="${escapeHTML(p.plannedAdmissionRoom)}"
+          oninput="
+            updatePatient(
+              '${p.id}',
+              'plannedAdmissionRoom',
+              this.value
+            )
+          "
+        >
+
+        <input
+          class="patientName"
+          placeholder="イニシャル・疾患名"
+          value="${escapeHTML(p.initial)}"
+          oninput="
+            updatePatient(
+              '${p.id}',
+              'initial',
+              this.value
+            )
+          "
+        >
+
+        <span></span>
+
+      </div>
+
+
+      <div class="statusRow">
+
+        <button
+          class="blue"
+          onclick="moveToWard('${p.id}')"
+        >
+          病棟へ移動
+        </button>
+
+        <button
+          class="red"
+          onclick="deletePatient('${p.id}')"
+        >
+          削除
+        </button>
+
+      </div>
+
+
+      <details class="detailsBox" open>
+
+        <summary>
+          入院予定
+        </summary>
+
+        <div class="detailsContent">
+
+          ${makeDateStateHTML(
+            p,
+            "patient",
+            "plannedAdmission",
+            "入院予定"
+          )}
+
+          <div class="formRow">
+
+            <div>予定病棟</div>
+
+            <input
+              type="text"
+              placeholder="6C など"
+              value="${escapeHTML(p.plannedAdmissionRoom)}"
+              oninput="
+                updatePatient(
+                  '${p.id}',
+                  'plannedAdmissionRoom',
+                  this.value
+                )
+              "
+            >
+
+            <span></span>
+
+          </div>
+
+        </div>
+
+      </details>
+
+
+      <details class="detailsBox">
+
+        <summary>
+          オーダー確認
+        </summary>
+
+        <div class="detailsContent">
+          ${ordersHTML}
+        </div>
+
+      </details>
+
+
+      ${makeTodosHTML(p)}
+
+      ${makeTodoEntryHTML(p)}
+    `;
+
+    box.appendChild(card);
+  });
+}
+
+
+/* =========================================
+   申し送り生成
+========================================= */
+
+function handoffPatientHeader(p) {
+
+  let s = "";
+
+  if(p.room) {
+    s += p.room + " ";
+  }
+
+  s += p.initial || "名称未入力";
+
+  if(p.handoff.regimen) {
+    s += " " + p.handoff.regimen;
+  }
+
+  if(p.handoff.mood) {
+    s += p.handoff.mood;
+  }
+
+  return s.trim();
+}
+
+
+function generateHandoff() {
+
+  const today =
+    todayString();
+
+  const admitted =
+    patients.filter(
+      p =>
+        p.admissionDate === today
+    );
+
+  const discharged =
+    patients.filter(
+      p =>
+        p.dischargeDate === today
+    );
+
+  const plannedAdmission =
+    patients
+      .filter(
+        p =>
+          p.location === "outpatient" &&
+          !p.plannedAdmission.noPlan &&
+          p.plannedAdmission.date
+      )
+      .sort(
+        (a,b) =>
+          a.plannedAdmission.date
+            .localeCompare(
+              b.plannedAdmission.date
+            )
+      );
+
+  const plannedDischarge =
+    patients
+      .filter(
+        p =>
+          p.location === "ward" &&
+          !p.plannedDischarge.noPlan &&
+          p.plannedDischarge.date
+      )
+      .sort(
+        (a,b) =>
+          a.plannedDischarge.date
+            .localeCompare(
+              b.plannedDischarge.date
+            )
+      );
+
+  const wardMembers =
+    patients
+      .filter(
+        p =>
+          p.location === "ward" &&
+          p.handoff.category === "ward"
+      )
+      .sort(compareRooms);
+
+  const consultMembers =
+    patients
+      .filter(
+        p =>
+          p.location === "ward" &&
+          p.handoff.category === "consult"
+      )
+      .sort(compareRooms);
+
+
+  const lines = [];
+
+  lines.push("<申し送り>");
+  lines.push("");
+
+
+  lines.push("☆入院:");
+
+  if(admitted.length) {
+    admitted.forEach(p => {
+      lines.push(
+        handoffPatientHeader(p)
+      );
+    });
+  } else {
+    lines.push("なし");
+  }
+
+  lines.push("");
+
+
+  lines.push("☆退院:");
+
+  if(discharged.length) {
+    discharged.forEach(p => {
+      lines.push(
+        handoffPatientHeader(p)
+      );
+    });
+  } else {
+    lines.push("なし");
+  }
+
+  lines.push("");
+
+
+  lines.push("☆入院予定:");
+
+  if(plannedAdmission.length) {
+
+    plannedAdmission.forEach(p => {
+
+      let s =
+        displayDate(
+          p.plannedAdmission.date
+        );
+
+      if(p.plannedAdmissionRoom) {
+        s +=
+          " " +
+          p.plannedAdmissionRoom;
+      }
+
+      s +=
+        " " +
+        (
+          p.initial ||
+          "名称未入力"
+        );
+
+      if(p.handoff.regimen) {
+        s +=
+          " " +
+          p.handoff.regimen;
+      }
+
+      lines.push(s);
+    });
+
+  } else {
+    lines.push("なし");
+  }
+
+  lines.push("");
+
+
+  lines.push("☆退院予定:");
+
+  if(plannedDischarge.length) {
+
+    plannedDischarge.forEach(p => {
+
+      let s =
+        displayDate(
+          p.plannedDischarge.date
+        );
+
+      if(p.room) {
+        s +=
+          " " +
+          p.room;
+      }
+
+      s +=
+        " " +
+        (
+          p.initial ||
+          "名称未入力"
+        );
+
+      lines.push(s);
+    });
+
+  } else {
+    lines.push("なし");
+  }
+
+  lines.push("");
+
+
+  lines.push("☆病棟メンバー");
+
+  if(wardMembers.length) {
+
+    wardMembers.forEach(p => {
+
+      lines.push(
+        handoffPatientHeader(p)
+      );
+
+      if(p.handoff.note) {
+        lines.push(
+          p.handoff.note.trim()
+        );
+      }
+
+      lines.push("");
+    });
+
+  } else {
+    lines.push("なし");
+    lines.push("");
   }
 
 
-  alert(
-    message
+  lines.push("☆兼科");
+
+  if(consultMembers.length) {
+
+    consultMembers.forEach(p => {
+
+      lines.push(
+        handoffPatientHeader(p)
+      );
+
+      if(p.handoff.note) {
+        lines.push(
+          p.handoff.note.trim()
+        );
+      }
+
+      lines.push("");
+    });
+
+  } else {
+    lines.push("なし");
+  }
+
+
+  document
+    .getElementById(
+      "handoffText"
+    )
+    .value =
+      lines.join("\n");
+}
+
+
+function openHandoff() {
+
+  generateHandoff();
+
+  document
+    .getElementById(
+      "handoffOverlay"
+    )
+    .style.display =
+      "block";
+}
+
+
+function closeHandoff() {
+
+  document
+    .getElementById(
+      "handoffOverlay"
+    )
+    .style.display =
+      "none";
+}
+
+
+async function copyHandoff() {
+
+  const textarea =
+    document.getElementById(
+      "handoffText"
+    );
+
+  try {
+
+    await navigator.clipboard.writeText(
+      textarea.value
+    );
+
+    alert(
+      "申し送りをコピーしました"
+    );
+
+  } catch(e) {
+
+    textarea.select();
+
+    document.execCommand(
+      "copy"
+    );
+
+    alert(
+      "申し送りをコピーしました"
+    );
+  }
+}
+
+
+/* =========================================
+   カレンダー
+========================================= */
+
+const now = new Date();
+
+let calendarYear =
+  now.getFullYear();
+
+let calendarMonth =
+  now.getMonth();
+
+
+function changeMonth(diff) {
+
+  calendarMonth += diff;
+
+  if(calendarMonth < 0) {
+    calendarMonth = 11;
+    calendarYear--;
+  }
+
+  if(calendarMonth > 11) {
+    calendarMonth = 0;
+    calendarYear++;
+  }
+
+  renderCalendar();
+}
+
+
+function goToday() {
+
+  const d =
+    new Date();
+
+  calendarYear =
+    d.getFullYear();
+
+  calendarMonth =
+    d.getMonth();
+
+  renderCalendar();
+}
+
+
+function renderCalendar() {
+
+  const grid =
+    document.getElementById(
+      "calendarGrid"
+    );
+
+  document
+    .getElementById(
+      "calendarTitle"
+    )
+    .textContent =
+      `${calendarYear}年 ${calendarMonth+1}月`;
+
+  grid.innerHTML = "";
+
+  const first =
+    new Date(
+      calendarYear,
+      calendarMonth,
+      1
+    );
+
+  const start =
+    new Date(first);
+
+  start.setDate(
+    1 - first.getDay()
   );
+
+  const today =
+    todayString();
+
+  for(
+    let i=0;
+    i<42;
+    i++
+  ) {
+
+    const d =
+      new Date(start);
+
+    d.setDate(
+      start.getDate()+i
+    );
+
+    const dateStr =
+      formatDateLocal(d);
+
+    const cell =
+      document.createElement(
+        "div"
+      );
+
+    cell.className =
+      "dayCell";
+
+    if(
+      d.getMonth() !==
+      calendarMonth
+    ) {
+      cell.classList.add(
+        "otherMonth"
+      );
+    }
+
+    if(dateStr === today) {
+      cell.classList.add(
+        "todayCell"
+      );
+    }
+
+    const n =
+      document.createElement(
+        "div"
+      );
+
+    n.className =
+      "dayNumber";
+
+    n.textContent =
+      d.getDate();
+
+    cell.appendChild(n);
+
+
+    const todos = [];
+
+    patients.forEach(p => {
+
+      p.todos.forEach(t => {
+
+        if(
+          t.dueDate === dateStr &&
+          t.priority === "high"
+        ) {
+
+          todos.push({
+            patient:p,
+            todo:t
+          });
+        }
+      });
+    });
+
+
+    todos
+      .slice(0,3)
+      .forEach(item => {
+
+        const el =
+          document.createElement(
+            "div"
+          );
+
+        el.className =
+          "calTodo" +
+          (
+            item.todo.done
+              ? " completed"
+              : ""
+          );
+
+        let name = "";
+
+        if(
+          item.patient.location === "ward" &&
+          item.patient.room
+        ) {
+          name +=
+            item.patient.room +
+            " ";
+        }
+
+        name +=
+          item.patient.initial ||
+          "?";
+
+        el.textContent =
+          name +
+          " " +
+          item.todo.text;
+
+        cell.appendChild(el);
+      });
+
+
+    if(todos.length > 3) {
+
+      const more =
+        document.createElement(
+          "div"
+        );
+
+      more.className =
+        "moreLabel";
+
+      more.textContent =
+        `+${todos.length-3}件`;
+
+      cell.appendChild(more);
+    }
+
+    grid.appendChild(cell);
+  }
 }
 
 
@@ -2457,21 +2795,11 @@ function addBloodTodos() {
 async function backupData() {
 
   const backup = {
-
-    app:
-      "Hospi Todo",
-
-    version:
-      4,
-
-    exportedAt:
-      new Date()
-      .toISOString(),
-
-    patients:
-      patients
+    app:"Hospi Todo",
+    version:5,
+    exportedAt:new Date().toISOString(),
+    patients
   };
-
 
   const json =
     JSON.stringify(
@@ -2480,58 +2808,33 @@ async function backupData() {
       2
     );
 
-
   const blob =
     new Blob(
       [json],
       {
-        type:
-          "application/json"
+        type:"application/json"
       }
     );
-
 
   const now =
     new Date();
 
-
-  const date =
-    formatDateLocal(
-      now
-    );
-
-
-  const time =
-    String(
-      now.getHours()
-    ).padStart(2,"0") +
-
-    String(
-      now.getMinutes()
-    ).padStart(2,"0");
-
-
   const filename =
     "hospi-todo-backup-" +
-    date +
+    formatDateLocal(now) +
     "-" +
-    time +
+    String(now.getHours()).padStart(2,"0") +
+    String(now.getMinutes()).padStart(2,"0") +
     ".json";
-
 
   const file =
     new File(
-
       [blob],
-
       filename,
-
       {
-        type:
-          "application/json"
+        type:"application/json"
       }
     );
-
 
   if(
     navigator.canShare &&
@@ -2543,1226 +2846,126 @@ async function backupData() {
     try {
 
       await navigator.share({
-
-        files:
-          [file],
-
-        title:
-          "病棟ToDoバックアップ"
+        files:[file],
+        title:"病棟ToDoバックアップ"
       });
-
 
       return;
 
     } catch(e) {
 
-      if(
-        e.name ===
-        "AbortError"
-      ) return;
+      if(e.name === "AbortError") {
+        return;
+      }
     }
   }
-
 
   const url =
-    URL.createObjectURL(
-      blob
-    );
-
+    URL.createObjectURL(blob);
 
   const a =
-    document.createElement(
-      "a"
-    );
+    document.createElement("a");
 
+  a.href = url;
+  a.download = filename;
 
-  a.href =
-    url;
-
-
-  a.download =
-    filename;
-
-
-  document.body
-    .appendChild(a);
-
-
+  document.body.appendChild(a);
   a.click();
-
-
   a.remove();
 
-
-  setTimeout(() => {
-
-    URL.revokeObjectURL(
-      url
-    );
-
-  },1000);
+  setTimeout(
+    () =>
+      URL.revokeObjectURL(url),
+    1000
+  );
 }
 
-
-/* =========================================
-   Restore
-========================================= */
 
 document
-.getElementById(
-  "restoreFile"
-)
-.addEventListener(
-  "change",
-  function(event) {
-
-    const file =
-      event.target.files[0];
-
-
-    if(!file)
-      return;
-
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload =
-      function() {
-
-      try {
-
-        const backup =
-          JSON.parse(
-            reader.result
-          );
-
-
-        if(
-          !backup ||
-          !Array.isArray(
-            backup.patients
-          )
-        ) {
-
-          alert(
-            "バックアップファイルの形式が正しくありません"
-          );
-
-          return;
-        }
-
-
-        if(
-          !confirm(
-            "現在のデータをバックアップ内容で上書きしますか？"
-          )
-        ) return;
-
-
-        patients =
-          normalizePatients(
-            backup.patients
-          );
-
-
-        save();
-
-
-        render();
-
-        renderBloodPatients();
-
-        renderCalendar();
-
-
-        alert(
-          "バックアップを復元しました"
-        );
-
-      } catch(e) {
-
-        alert(
-          "バックアップファイルを読み込めませんでした"
-        );
-      }
-
-
-      event.target.value =
-        "";
-    };
-
-
-    reader.readAsText(
-      file
-    );
-  }
-);
-
-
-/* =========================================
-   Escape
-========================================= */
-
-function escapeHTML(str) {
-
-  return String(str)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-}
-
-
-/* =========================================
-   患者一覧 render
-========================================= */
-
-function render() {
-
-  const container =
-    document.getElementById(
-      "patients"
-    );
-
-
-  container.innerHTML =
-    "";
-
-
-  document
   .getElementById(
-    "empty"
+    "restoreFile"
   )
-  .style.display =
-    patients.length
-      ? "none"
-      : "block";
+  .addEventListener(
+    "change",
+    function(event) {
 
+      const file =
+        event.target.files[0];
 
-  patients.forEach(
-    (p,index) => {
+      if(!file) return;
 
-    const card =
-      document.createElement(
-        "div"
-      );
+      const reader =
+        new FileReader();
 
+      reader.onload =
+        function() {
 
-    card.id =
-      "patient-" +
-      p.id;
+          try {
 
+            const backup =
+              JSON.parse(
+                reader.result
+              );
 
-    card.className =
-      "card patientCard" +
-      (
-        p.finished
-          ? " finished"
-          : ""
-      );
-
-
-    /* =====================
-       オーダー
-    ===================== */
-
-    const orderLabels = [
-
-      [
-        "blood",
-        "採血"
-      ],
-
-      [
-        "drip",
-        "点滴"
-      ],
-
-      [
-        "procedure",
-        "処置"
-      ],
-
-      [
-        "prescription",
-        "処方"
-      ]
-    ];
-
-
-    let ordersHTML =
-      "";
-
-
-    orderLabels.forEach(
-      ([key,label]) => {
-
-      const status =
-        dateStatus(
-          p.orders[key]
-        );
-
-
-      ordersHTML += `
-
-        <div class="orderGrid">
-
-          <div>
-            ${label}
-          </div>
-
-          <input
-            type="date"
-
-            value="${
-              p.orders[key] ||
-              ""
-            }"
-
-            onchange="
-              updateOrder(
-                '${p.id}',
-                '${key}',
-                this.value
+            if(
+              !backup ||
+              !Array.isArray(
+                backup.patients
               )
-            "
-          >
+            ) {
+              alert(
+                "バックアップ形式が正しくありません"
+              );
+              return;
+            }
 
-          <span
-            class="
-              badge
-              ${status.cls}
-            "
-          >
-            ${status.text}
-          </span>
-
-        </div>
-      `;
-    });
-
-
-    /* =====================
-       Todo
-    ===================== */
-
-    let todosHTML =
-      "";
-
-
-    p.todos.forEach(t => {
-
-      const dateInfo =
-        todoDateText(
-          t.dueDate,
-          t.done
-        );
-
-
-      todosHTML += `
-
-        <div class="todo">
-
-          <div class="todoMain">
-
-            <input
-              type="checkbox"
-
-              ${
-                t.done
-                  ? "checked"
-                  : ""
-              }
-
-              onchange="
-                toggleTodo(
-                  '${p.id}',
-                  '${t.id}'
-                )
-              "
-            >
-
-
-            <div
-              class="
-                todoText
-                ${
-                  t.done
-                    ? "done"
-                    : ""
-                }
-              "
-            >
-
-              ${
-                escapeHTML(
-                  t.text
-                )
-              }
-
-            </div>
-
-
-            <button
-              class="red"
-
-              onclick="
-                deleteTodo(
-                  '${p.id}',
-                  '${t.id}'
-                )
-              "
-            >
-              ×
-            </button>
-
-          </div>
-
-
-          <div class="todoMeta">
-
-            <span
-              class="
-                tag
-                ${t.priority}
-              "
-            >
-
-              ${
-                priorityText(
-                  t.priority
-                )
-              }
-
-            </span>
-
-
-            <span
-              class="
-                tag
-                ${dateInfo.cls}
-              "
-            >
-
-              ${dateInfo.text}
-
-            </span>
-
-          </div>
-
-        </div>
-      `;
-    });
-
-
-    /* =====================
-       Card
-    ===================== */
-
-    card.innerHTML = `
-
-      <div class="patientTop">
-
-        <input
-          class="room"
-
-          placeholder="部屋"
-
-          value="${
-            escapeHTML(
-              p.room
-            )
-          }"
-
-          oninput="
-            updatePatient(
-              '${p.id}',
-              'room',
-              this.value
-            )
-          "
-        >
-
-
-        <input
-          class="patientName"
-
-          placeholder="イニシャル・疾患名"
-
-          value="${
-            escapeHTML(
-              p.initial
-            )
-          }"
-
-          oninput="
-            updatePatient(
-              '${p.id}',
-              'initial',
-              this.value
-            )
-          "
-        >
-
-
-        <div class="moveRow">
-
-          <button
-            class="gray"
-
-            onclick="
-              movePatient(
-                '${p.id}',
-                -1
+            if(
+              !confirm(
+                "現在のデータをバックアップ内容で上書きしますか？"
               )
-            "
+            ) return;
 
-            ${
-              index === 0
-                ? "disabled"
-                : ""
-            }
-          >
-            ↑
-          </button>
+            patients =
+              normalizePatients(
+                backup.patients
+              );
 
+            save();
+            renderAll();
 
-          <button
-            class="gray"
+            alert(
+              "バックアップを復元しました"
+            );
 
-            onclick="
-              movePatient(
-                '${p.id}',
-                1
-              )
-            "
+          } catch(e) {
 
-            ${
-              index ===
-              patients.length - 1
-
-                ? "disabled"
-                : ""
-            }
-          >
-            ↓
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div class="statusRow">
-
-        <button
-          class="
-            ${
-              p.finished
-                ? "green"
-                : "gray"
-            }
-          "
-
-          onclick="
-            toggleFinished(
-              '${p.id}'
-            )
-          "
-        >
-
-          ${
-            p.finished
-
-              ? "✓ 患者完了"
-
-              : "患者完了"
+            alert(
+              "バックアップを読み込めませんでした"
+            );
           }
 
-        </button>
+          event.target.value = "";
+        };
 
-
-        <button
-          class="red"
-
-          onclick="
-            deletePatient(
-              '${p.id}'
-            )
-          "
-        >
-          患者削除
-        </button>
-
-      </div>
-
-
-      <details class="orderDetails">
-
-        <summary>
-          オーダー確認
-        </summary>
-
-        <div class="orderContent">
-
-          ${ordersHTML}
-
-        </div>
-
-      </details>
-
-
-      ${todosHTML}
-
-
-      <div class="todoEntry">
-
-        <input
-          id="text-${p.id}"
-
-          class="todoTextInput"
-
-          placeholder="ToDo"
-
-          onkeydown="
-            if(
-              event.key ===
-              'Enter'
-            ){
-              addTodo(
-                '${p.id}'
-              )
-            }
-          "
-        >
-
-
-        <select
-          id="priority-${p.id}"
-        >
-
-          <option value="high">
-            高
-          </option>
-
-          <option
-            value="normal"
-            selected
-          >
-            通常
-          </option>
-
-          <option value="low">
-            低
-          </option>
-
-        </select>
-
-
-        <input
-          id="date-${p.id}"
-
-          class="dateInput"
-
-          type="date"
-
-          value="${
-            todayString()
-          }"
-        >
-
-
-        <button
-          class="blue"
-
-          onclick="
-            addTodo(
-              '${p.id}'
-            )
-          "
-        >
-          追加
-        </button>
-
-      </div>
-    `;
-
-
-    container
-      .appendChild(
-        card
-      );
-  });
-}
+      reader.readAsText(file);
+    }
+  );
 
 
 /* =========================================
-   Calendar
+   全描画
 ========================================= */
 
-const now =
-  new Date();
+function renderAll() {
 
-
-let calendarYear =
-  now.getFullYear();
-
-
-let calendarMonth =
-  now.getMonth();
-
-
-function changeMonth(diff) {
-
-  calendarMonth +=
-    diff;
-
-
-  if(
-    calendarMonth < 0
-  ) {
-
-    calendarMonth =
-      11;
-
-    calendarYear--;
-
-  } else if(
-    calendarMonth > 11
-  ) {
-
-    calendarMonth =
-      0;
-
-    calendarYear++;
-  }
-
-
+  renderWard();
+  renderOutpatient();
+  renderBloodPatients();
   renderCalendar();
 }
 
 
-function goToday() {
-
-  const d =
-    new Date();
-
-
-  calendarYear =
-    d.getFullYear();
-
-
-  calendarMonth =
-    d.getMonth();
-
-
-  renderCalendar();
-}
-
-
-function openPatient(id) {
-
-  showTab(
-    "patients"
-  );
-
-
-  setTimeout(() => {
-
-    const el =
-      document.getElementById(
-        "patient-" + id
-      );
-
-
-    if(!el)
-      return;
-
-
-    el.scrollIntoView({
-
-      behavior:
-        "smooth",
-
-      block:
-        "center"
-    });
-
-
-    el.style.outline =
-      "3px solid #007aff";
-
-
-    setTimeout(() => {
-
-      el.style.outline =
-        "";
-
-    },1200);
-
-  },50);
-}
-
-
-function renderCalendar() {
-
-  const title =
-    document.getElementById(
-      "calendarTitle"
-    );
-
-
-  const grid =
-    document.getElementById(
-      "calendarGrid"
-    );
-
-
-  title.textContent =
-    calendarYear +
-    "年 " +
-    (calendarMonth + 1) +
-    "月";
-
-
-  grid.innerHTML =
-    "";
-
-
-  const first =
-    new Date(
-      calendarYear,
-      calendarMonth,
-      1
-    );
-
-
-  const start =
-    new Date(
-      first
-    );
-
-
-  start.setDate(
-    1 -
-    first.getDay()
-  );
-
-
-  const today =
-    todayString();
-
-
-  for(
-    let i = 0;
-    i < 42;
-    i++
-  ) {
-
-    const d =
-      new Date(
-        start
-      );
-
-
-    d.setDate(
-      start.getDate() +
-      i
-    );
-
-
-    const dateStr =
-      formatDateLocal(
-        d
-      );
-
-
-    const cell =
-      document.createElement(
-        "div"
-      );
-
-
-    cell.className =
-      "dayCell";
-
-
-    if(
-      d.getMonth() !==
-      calendarMonth
-    ) {
-
-      cell.classList
-        .add(
-          "otherMonth"
-        );
-    }
-
-
-    if(
-      dateStr ===
-      today
-    ) {
-
-      cell.classList
-        .add(
-          "todayCell"
-        );
-    }
-
-
-    const number =
-      document.createElement(
-        "div"
-      );
-
-
-    number.className =
-      "dayNumber";
-
-
-    number.textContent =
-      d.getDate();
-
-
-    cell.appendChild(
-      number
-    );
-
-
-    const dayTodos =
-      [];
-
-
-    patients.forEach(p => {
-
-      p.todos.forEach(t => {
-
-        /*
-          カレンダーは
-          priority highのみ
-        */
-
-        if(
-
-          t.dueDate ===
-            dateStr &&
-
-          t.priority ===
-            "high"
-
-        ) {
-
-          dayTodos.push({
-
-            patient:
-              p,
-
-            todo:
-              t
-          });
-        }
-      });
-    });
-
-
-    /*
-      未完了を先に
-    */
-
-    dayTodos.sort(
-      (a,b) => {
-
-      if(
-        a.todo.done !==
-        b.todo.done
-      ) {
-
-        return (
-          a.todo.done
-            ? 1
-            : -1
-        );
-      }
-
-
-      return 0;
-    });
-
-
-    const maxShow =
-      3;
-
-
-    dayTodos
-      .slice(
-        0,
-        maxShow
-      )
-      .forEach(
-        item => {
-
-      const el =
-        document.createElement(
-          "div"
-        );
-
-
-      el.className =
-        "calTodo";
-
-
-      if(
-        item.todo.done
-      ) {
-
-        el.classList
-          .add(
-            "completed"
-          );
-      }
-
-
-      const patientName =
-        (
-          item.patient.room
-
-            ? item.patient.room +
-              " "
-
-            : ""
-        ) +
-
-        (
-          item.patient.initial ||
-          "?"
-        );
-
-
-      el.innerHTML =
-
-        `<span class="calPatient">` +
-
-        escapeHTML(
-          patientName
-        ) +
-
-        `</span> ` +
-
-        escapeHTML(
-          item.todo.text
-        );
-
-
-      el.onclick =
-        () =>
-          openPatient(
-            item.patient.id
-          );
-
-
-      cell.appendChild(
-        el
-      );
-    });
-
-
-    if(
-      dayTodos.length >
-      maxShow
-    ) {
-
-      const more =
-        document.createElement(
-          "div"
-        );
-
-
-      more.className =
-        "moreLabel";
-
-
-      more.textContent =
-        "+" +
-        (
-          dayTodos.length -
-          maxShow
-        ) +
-        "件";
-
-
-      cell.appendChild(
-        more
-      );
-    }
-
-
-    grid.appendChild(
-      cell
-    );
-  }
-
-
-  renderUndated();
-}
-
-
-function renderUndated() {
-
-  const list =
-    document.getElementById(
-      "undatedList"
-    );
-
-
-  const box =
-    document.getElementById(
-      "undatedBox"
-    );
-
-
-  list.innerHTML =
-    "";
-
-
-  const items =
-    [];
-
-
-  patients.forEach(p => {
-
-    p.todos.forEach(t => {
-
-      /*
-        日付未設定でも
-        優先度 high のみ
-      */
-
-      if(
-
-        !t.dueDate &&
-
-        t.priority ===
-          "high"
-
-      ) {
-
-        items.push({
-
-          patient:
-            p,
-
-          todo:
-            t
-        });
-      }
-    });
-  });
-
-
-  if(
-    !items.length
-  ) {
-
-    box.style.display =
-      "none";
-
-    return;
-  }
-
-
-  box.style.display =
-    "block";
-
-
-  items.forEach(
-    item => {
-
-    const el =
-      document.createElement(
-        "div"
-      );
-
-
-    el.className =
-      "undatedItem";
-
-
-    const patientName =
-      (
-        item.patient.room
-
-          ? item.patient.room +
-            " "
-
-          : ""
-      ) +
-
-      (
-        item.patient.initial ||
-        "?"
-      );
-
-
-    el.innerHTML =
-
-      `<b>${
-        escapeHTML(
-          patientName
-        )
-      }</b> ` +
-
-      escapeHTML(
-        item.todo.text
-      );
-
-
-    el.onclick =
-      () =>
-        openPatient(
-          item.patient.id
-        );
-
-
-    list.appendChild(
-      el
-    );
-  });
-}
-
-
-/* =========================================
-   起動
-========================================= */
-
-render();
-
-renderBloodPatients();
-
-renderCalendar();
+renderAll();
 
 </script>
 

@@ -2,14 +2,16 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="病棟ToDo">
 <title>病棟ToDo</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -21,13 +23,13 @@ body {
 header {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background: rgba(255,255,255,.95);
-  padding: 14px 16px;
+  z-index: 20;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.96);
   border-bottom: 1px solid #ddd;
 }
 
-.header-row {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,26 +37,48 @@ header {
 
 h1 {
   margin: 0;
-  font-size: 22px;
+  font-size: 21px;
 }
 
 main {
-  padding: 14px;
-  max-width: 700px;
+  padding: 12px;
+  max-width: 760px;
   margin: auto;
 }
 
 button {
   border: 0;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 15px;
+  border-radius: 9px;
+  padding: 8px 10px;
   font-weight: 600;
+  font-size: 14px;
 }
 
-.add-patient {
+.blue {
   background: #007aff;
   color: white;
+}
+
+.gray {
+  background: #e5e5ea;
+  color: #111;
+}
+
+.red {
+  background: #ffe5e5;
+  color: #b00020;
+}
+
+.green {
+  background: #dff6e5;
+  color: #157a32;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
 }
 
 .card {
@@ -65,85 +89,201 @@ button {
   box-shadow: 0 1px 4px rgba(0,0,0,.08);
 }
 
-.patient-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.card.finished {
+  opacity: .58;
 }
 
+.patientTop {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 7px;
+  align-items: center;
+}
+
+.room,
 .initial {
-  flex: 1;
   border: 1px solid #ccc;
   border-radius: 9px;
   padding: 9px;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+}
+
+.initial {
+  font-weight: 700;
   text-transform: uppercase;
 }
 
-.delete {
-  background: #ffe5e5;
-  color: #c00;
-  padding: 8px 11px;
-}
-
-.todo {
+.moveRow {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 2px;
-  border-bottom: 1px solid #eee;
+  gap: 5px;
 }
 
-.todo input[type=checkbox] {
-  width: 21px;
-  height: 21px;
-}
-
-.todo-text {
-  flex: 1;
-  font-size: 16px;
-}
-
-.completed {
-  color: #999;
-  text-decoration: line-through;
-}
-
-.todo-entry {
+.statusRow {
   display: flex;
-  gap: 7px;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.orderBox {
+  background: #f7f7f9;
+  border-radius: 11px;
+  padding: 9px;
   margin-top: 10px;
 }
 
-.todo-entry input {
-  flex: 1;
-  min-width: 0;
+.orderTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 7px;
+}
+
+.orderGrid {
+  display: grid;
+  grid-template-columns: 55px 1fr auto;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.orderGrid input {
   border: 1px solid #ccc;
-  border-radius: 9px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 7px;
+  width: 100%;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.expired {
+  background: #ffdada;
+  color: #a40000;
+}
+
+.today {
+  background: #ffe8b3;
+  color: #865700;
+}
+
+.tomorrow {
+  background: #fff3c7;
+  color: #755800;
+}
+
+.safe {
+  background: #dff6e5;
+  color: #12692d;
+}
+
+.none {
+  background: #e5e5ea;
+  color: #666;
+}
+
+.todo {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.todoMain {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.todoMain input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+}
+
+.todoText {
+  flex: 1;
   font-size: 16px;
 }
 
-.todo-entry button {
-  background: #007aff;
-  color: white;
+.done {
+  text-decoration: line-through;
+  color: #999;
 }
 
-.toolbar {
+.todoMeta {
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 5px;
+  margin: 5px 0 0 28px;
 }
 
-.toolbar button {
+.tag {
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.high {
+  background: #ffdada;
+  color: #a00000;
+}
+
+.normal {
   background: #e5e5ea;
+}
+
+.low {
+  background: #e8f3ff;
+  color: #1467a5;
+}
+
+.when {
+  background: #eeeafc;
+  color: #51409a;
+}
+
+.todoEntry {
+  display: grid;
+  grid-template-columns: 1fr 82px 82px auto;
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.todoEntry input,
+.todoEntry select {
+  min-width: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
 }
 
 .empty {
   text-align: center;
   color: #888;
-  margin-top: 60px;
+  margin-top: 50px;
+}
+
+.sectionTitle {
+  font-size: 12px;
+  color: #777;
+  margin: 4px 0 8px;
+}
+
+@media(max-width: 520px) {
+  .todoEntry {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .todoEntry input {
+    grid-column: 1/3;
+  }
+
+  .todoEntry button {
+    grid-column: 2;
+  }
 }
 </style>
 </head>
@@ -151,16 +291,43 @@ button {
 <body>
 
 <header>
-  <div class="header-row">
+  <div class="header">
     <h1>病棟 ToDo</h1>
-    <button class="add-patient" onclick="addPatient()">＋ 患者</button>
+    <button class="blue" onclick="addPatient()">＋患者</button>
   </div>
 </header>
 
 <main>
 
 <div class="toolbar">
-  <button onclick="deleteCompleted()">✓ 完了を削除</button>
+  <button class="gray" onclick="deleteCompletedTodos()">
+    ✓ 完了ToDo削除
+  </button>
+
+  <button class="red" onclick="deleteFinishedPatients()">
+    完了患者一括削除
+  </button>
+</div>
+
+<div class="toolbar">
+  <button class="gray" onclick="backupData()">
+    バックアップ保存
+  </button>
+
+  <button class="gray" onclick="document.getElementById('restoreFile').click()">
+    バックアップ復元
+  </button>
+
+  <input
+    id="restoreFile"
+    type="file"
+    accept=".json,application/json"
+    style="display:none"
+  >
+</div>
+
+<div class="sectionTitle">
+  バックアップは「ファイルに保存」からBoxを選択できます
 </div>
 
 <div id="patients"></div>
@@ -173,22 +340,60 @@ button {
 
 <script>
 
+const KEY = "hospiTodo";
+
 let patients = [];
 
 try {
-  patients = JSON.parse(localStorage.getItem("hospiTodo")) || [];
-} catch {
+  patients = JSON.parse(localStorage.getItem(KEY)) || [];
+} catch(e) {
   patients = [];
 }
 
+/* 旧バージョンのデータを新形式へ変換 */
+patients = patients.map(p => ({
+  id: p.id || Date.now() + Math.random(),
+  room: p.room || "",
+  initial: p.initial || "",
+  finished: !!p.finished,
+
+  orders: p.orders || {
+    blood: "",
+    drip: "",
+    procedure: "",
+    prescription: ""
+  },
+
+  todos: (p.todos || []).map(t => ({
+    id: t.id || Date.now() + Math.random(),
+    text: t.text || "",
+    done: !!t.done,
+    priority: t.priority || "normal",
+    timing: t.timing || "today"
+  }))
+}));
+
+save();
+
 function save() {
-  localStorage.setItem("hospiTodo", JSON.stringify(patients));
+  localStorage.setItem(KEY, JSON.stringify(patients));
 }
 
 function addPatient() {
+
   patients.push({
     id: Date.now(),
+    room: "",
     initial: "",
+    finished: false,
+
+    orders: {
+      blood: "",
+      drip: "",
+      procedure: "",
+      prescription: ""
+    },
+
     todos: []
   });
 
@@ -198,7 +403,7 @@ function addPatient() {
 
 function deletePatient(id) {
 
-  if (!confirm("この患者を削除しますか？")) return;
+  if(!confirm("この患者を削除しますか？")) return;
 
   patients = patients.filter(p => p.id !== id);
 
@@ -206,60 +411,112 @@ function deletePatient(id) {
   render();
 }
 
-function updateInitial(id, value) {
+function movePatient(id, dir) {
 
-  const patient = patients.find(p => p.id === id);
+  const i = patients.findIndex(p => p.id === id);
+  const j = i + dir;
 
-  if (patient) {
-    patient.initial = value.toUpperCase();
-    save();
-  }
+  if(i < 0 || j < 0 || j >= patients.length) return;
+
+  [patients[i], patients[j]] = [patients[j], patients[i]];
+
+  save();
+  render();
+}
+
+function updatePatient(id, key, value) {
+
+  const p = patients.find(p => p.id === id);
+
+  if(!p) return;
+
+  p[key] = value;
+
+  save();
+}
+
+function toggleFinished(id) {
+
+  const p = patients.find(p => p.id === id);
+
+  if(!p) return;
+
+  p.finished = !p.finished;
+
+  save();
+  render();
+}
+
+function updateOrder(id, type, value) {
+
+  const p = patients.find(p => p.id === id);
+
+  if(!p) return;
+
+  p.orders[type] = value;
+
+  save();
+  render();
 }
 
 function addTodo(id) {
 
-  const input = document.getElementById("input-" + id);
+  const text =
+    document.getElementById("text-" + id).value.trim();
 
-  const text = input.value.trim();
+  const priority =
+    document.getElementById("priority-" + id).value;
 
-  if (!text) return;
+  const timing =
+    document.getElementById("timing-" + id).value;
 
-  const patient = patients.find(p => p.id === id);
+  if(!text) return;
 
-  patient.todos.push({
+  const p = patients.find(p => p.id === id);
+
+  if(!p) return;
+
+  p.todos.push({
     id: Date.now(),
     text: text,
-    done: false
+    done: false,
+    priority: priority,
+    timing: timing
   });
 
   save();
   render();
 }
 
-function toggleTodo(patientId, todoId) {
+function toggleTodo(pid, tid) {
 
-  const patient = patients.find(p => p.id === patientId);
+  const p = patients.find(p => p.id === pid);
 
-  const todo = patient.todos.find(t => t.id === todoId);
+  if(!p) return;
 
-  todo.done = !todo.done;
+  const t = p.todos.find(t => t.id === tid);
 
-  save();
-  render();
-}
+  if(!t) return;
 
-function deleteTodo(patientId, todoId) {
-
-  const patient = patients.find(p => p.id === patientId);
-
-  patient.todos =
-    patient.todos.filter(t => t.id !== todoId);
+  t.done = !t.done;
 
   save();
   render();
 }
 
-function deleteCompleted() {
+function deleteTodo(pid, tid) {
+
+  const p = patients.find(p => p.id === pid);
+
+  if(!p) return;
+
+  p.todos = p.todos.filter(t => t.id !== tid);
+
+  save();
+  render();
+}
+
+function deleteCompletedTodos() {
 
   patients.forEach(p => {
     p.todos = p.todos.filter(t => !t.done);
@@ -269,93 +526,291 @@ function deleteCompleted() {
   render();
 }
 
-function render() {
+function deleteFinishedPatients() {
 
-  const container =
-    document.getElementById("patients");
+  const n = patients.filter(p => p.finished).length;
 
-  container.innerHTML = "";
+  if(!n) {
+    alert("完了患者はいません");
+    return;
+  }
 
-  document.getElementById("empty").style.display =
-    patients.length ? "none" : "block";
+  if(!confirm(
+    "完了患者 " + n + "名を削除しますか？"
+  )) return;
 
-  patients.forEach(patient => {
+  patients = patients.filter(p => !p.finished);
 
-    const card = document.createElement("div");
-
-    card.className = "card";
-
-    let todos = "";
-
-    patient.todos.forEach(todo => {
-
-      todos += `
-      <div class="todo">
-
-        <input
-          type="checkbox"
-          ${todo.done ? "checked" : ""}
-          onchange="toggleTodo(${patient.id},${todo.id})">
-
-        <span class="todo-text ${todo.done ? "completed" : ""}">
-          ${escapeHTML(todo.text)}
-        </span>
-
-        <button
-          class="delete"
-          onclick="deleteTodo(${patient.id},${todo.id})">
-          ×
-        </button>
-
-      </div>
-      `;
-    });
-
-    card.innerHTML = `
-
-      <div class="patient-header">
-
-        <input
-          class="initial"
-          maxlength="8"
-          placeholder="イニシャル"
-          value="${escapeHTML(patient.initial)}"
-          oninput="updateInitial(${patient.id},this.value)">
-
-        <button
-          class="delete"
-          onclick="deletePatient(${patient.id})">
-          削除
-        </button>
-
-      </div>
-
-      ${todos}
-
-      <div class="todo-entry">
-
-        <input
-          id="input-${patient.id}"
-          type="text"
-          placeholder="ToDoを入力"
-          onkeydown="
-            if(event.key==='Enter'){
-              addTodo(${patient.id})
-            }">
-
-        <button
-          onclick="addTodo(${patient.id})">
-          追加
-        </button>
-
-      </div>
-    `;
-
-    container.appendChild(card);
-
-  });
-
+  save();
+  render();
 }
+
+function dateStatus(dateStr) {
+
+  if(!dateStr) {
+    return {
+      text: "未入力",
+      cls: "none"
+    };
+  }
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const d = new Date(dateStr + "T00:00:00");
+
+  const diff =
+    Math.round((d - today) / 86400000);
+
+  if(diff < 0) {
+    return {
+      text: "期限切れ",
+      cls: "expired"
+    };
+  }
+
+  if(diff === 0) {
+    return {
+      text: "今日まで",
+      cls: "today"
+    };
+  }
+
+  if(diff === 1) {
+    return {
+      text: "明日まで",
+      cls: "tomorrow"
+    };
+  }
+
+  return {
+    text: diff + "日先まで",
+    cls: "safe"
+  };
+}
+
+function priorityText(v) {
+
+  if(v === "high") return "高";
+  if(v === "low") return "低";
+
+  return "通常";
+}
+
+function timingText(v) {
+
+  if(v === "tomorrow") return "明日";
+  if(v === "later") return "後日";
+
+  return "今日";
+}
+
+/* ---------- バックアップ ---------- */
+
+async function backupData() {
+
+  const backup = {
+    app: "Hospi Todo",
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    patients: patients
+  };
+
+  const json =
+    JSON.stringify(backup, null, 2);
+
+  const blob =
+    new Blob(
+      [json],
+      {type: "application/json"}
+    );
+
+  const now = new Date();
+
+  const date =
+    now.getFullYear() + "-" +
+    String(now.getMonth()+1).padStart(2,"0") + "-" +
+    String(now.getDate()).padStart(2,"0");
+
+  const time =
+    String(now.getHours()).padStart(2,"0") +
+    String(now.getMinutes()).padStart(2,"0");
+
+  const filename =
+    "hospi-todo-backup-" +
+    date +
+    "-" +
+    time +
+    ".json";
+
+  const file =
+    new File(
+      [blob],
+      filename,
+      {type: "application/json"}
+    );
+
+  /*
+    iPhone Safari / PWAで共有シートが利用できれば、
+    「ファイルに保存」→ Box が選べる
+  */
+
+  if(
+    navigator.canShare &&
+    navigator.canShare({files:[file]})
+  ) {
+
+    try {
+
+      await navigator.share({
+        files: [file],
+        title: "病棟ToDoバックアップ"
+      });
+
+      return;
+
+    } catch(e) {
+
+      if(e.name === "AbortError") {
+        return;
+      }
+
+    }
+  }
+
+  /*
+    Web Shareが使えない場合のフォールバック
+  */
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = filename;
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 1000);
+}
+
+/* ---------- 復元 ---------- */
+
+document
+.getElementById("restoreFile")
+.addEventListener(
+  "change",
+  function(event) {
+
+    const file =
+      event.target.files[0];
+
+    if(!file) return;
+
+    const reader =
+      new FileReader();
+
+    reader.onload = function() {
+
+      try {
+
+        const backup =
+          JSON.parse(reader.result);
+
+        if(
+          !backup ||
+          !Array.isArray(backup.patients)
+        ) {
+
+          alert(
+            "バックアップファイルの形式が正しくありません"
+          );
+
+          return;
+        }
+
+        const ok =
+          confirm(
+            "現在のデータをバックアップ内容で上書きしますか？"
+          );
+
+        if(!ok) return;
+
+        patients =
+          backup.patients.map(p => ({
+
+            id:
+              p.id ||
+              Date.now() +
+              Math.random(),
+
+            room:
+              p.room || "",
+
+            initial:
+              p.initial || "",
+
+            finished:
+              !!p.finished,
+
+            orders:
+              p.orders || {
+                blood: "",
+                drip: "",
+                procedure: "",
+                prescription: ""
+              },
+
+            todos:
+              (p.todos || []).map(t => ({
+
+                id:
+                  t.id ||
+                  Date.now() +
+                  Math.random(),
+
+                text:
+                  t.text || "",
+
+                done:
+                  !!t.done,
+
+                priority:
+                  t.priority || "normal",
+
+                timing:
+                  t.timing || "today"
+              }))
+          }));
+
+        save();
+        render();
+
+        alert("バックアップを復元しました");
+
+      } catch(e) {
+
+        alert(
+          "バックアップファイルを読み込めませんでした"
+        );
+      }
+
+      event.target.value = "";
+    };
+
+    reader.readAsText(file);
+  }
+);
+
+/* ---------- 表示 ---------- */
 
 function escapeHTML(str) {
 
@@ -365,6 +820,318 @@ function escapeHTML(str) {
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
+}
+
+function render() {
+
+  const container =
+    document.getElementById("patients");
+
+  container.innerHTML = "";
+
+  document.getElementById("empty")
+    .style.display =
+      patients.length
+        ? "none"
+        : "block";
+
+  patients.forEach((p,index) => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "card" +
+      (p.finished
+        ? " finished"
+        : "");
+
+    const labels = [
+      ["blood","採血"],
+      ["drip","点滴"],
+      ["procedure","処置"],
+      ["prescription","処方"]
+    ];
+
+    let orders = "";
+
+    labels.forEach(
+      ([key,label]) => {
+
+        const s =
+          dateStatus(
+            p.orders[key]
+          );
+
+        orders += `
+        <div class="orderGrid">
+
+          <div>${label}</div>
+
+          <input
+            type="date"
+            value="${p.orders[key] || ""}"
+            onchange="
+              updateOrder(
+                ${p.id},
+                '${key}',
+                this.value
+              )
+            "
+          >
+
+          <span class="badge ${s.cls}">
+            ${s.text}
+          </span>
+
+        </div>
+        `;
+      }
+    );
+
+    let todos = "";
+
+    p.todos.forEach(t => {
+
+      todos += `
+      <div class="todo">
+
+        <div class="todoMain">
+
+          <input
+            type="checkbox"
+            ${t.done ? "checked" : ""}
+            onchange="
+              toggleTodo(
+                ${p.id},
+                ${t.id}
+              )
+            "
+          >
+
+          <div
+            class="
+              todoText
+              ${t.done ? "done" : ""}
+            "
+          >
+            ${escapeHTML(t.text)}
+          </div>
+
+          <button
+            class="red"
+            onclick="
+              deleteTodo(
+                ${p.id},
+                ${t.id}
+              )
+            "
+          >
+            ×
+          </button>
+
+        </div>
+
+        <div class="todoMeta">
+
+          <span
+            class="
+              tag
+              ${t.priority}
+            "
+          >
+            ${priorityText(t.priority)}
+          </span>
+
+          <span
+            class="tag when"
+          >
+            ${timingText(t.timing)}
+          </span>
+
+        </div>
+
+      </div>
+      `;
+    });
+
+    card.innerHTML = `
+
+    <div class="patientTop">
+
+      <input
+        class="room"
+        placeholder="部屋"
+        value="${escapeHTML(p.room)}"
+        oninput="
+          updatePatient(
+            ${p.id},
+            'room',
+            this.value
+          )
+        "
+      >
+
+      <input
+        class="initial"
+        placeholder="イニシャル"
+        maxlength="8"
+        value="${escapeHTML(p.initial)}"
+        oninput="
+          updatePatient(
+            ${p.id},
+            'initial',
+            this.value.toUpperCase()
+          )
+        "
+      >
+
+      <div class="moveRow">
+
+        <button
+          class="gray"
+          onclick="
+            movePatient(
+              ${p.id},
+              -1
+            )
+          "
+          ${index === 0
+            ? "disabled"
+            : ""}
+        >
+          ↑
+        </button>
+
+        <button
+          class="gray"
+          onclick="
+            movePatient(
+              ${p.id},
+              1
+            )
+          "
+          ${
+            index ===
+            patients.length - 1
+            ? "disabled"
+            : ""
+          }
+        >
+          ↓
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="statusRow">
+
+      <button
+        class="
+          ${p.finished
+            ? "green"
+            : "gray"}
+        "
+        onclick="
+          toggleFinished(
+            ${p.id}
+          )
+        "
+      >
+        ${
+          p.finished
+            ? "✓ 患者完了"
+            : "患者完了"
+        }
+      </button>
+
+      <button
+        class="red"
+        onclick="
+          deletePatient(
+            ${p.id}
+          )
+        "
+      >
+        患者削除
+      </button>
+
+    </div>
+
+    <div class="orderBox">
+
+      <div class="orderTitle">
+        オーダー入力済み日
+      </div>
+
+      ${orders}
+
+    </div>
+
+    ${todos}
+
+    <div class="todoEntry">
+
+      <input
+        id="text-${p.id}"
+        placeholder="ToDo"
+        onkeydown="
+          if(event.key === 'Enter'){
+            addTodo(${p.id})
+          }
+        "
+      >
+
+      <select
+        id="priority-${p.id}"
+      >
+        <option value="high">
+          高
+        </option>
+
+        <option
+          value="normal"
+          selected
+        >
+          通常
+        </option>
+
+        <option value="low">
+          低
+        </option>
+      </select>
+
+      <select
+        id="timing-${p.id}"
+      >
+        <option value="today">
+          今日
+        </option>
+
+        <option value="tomorrow">
+          明日
+        </option>
+
+        <option value="later">
+          後日
+        </option>
+      </select>
+
+      <button
+        class="blue"
+        onclick="
+          addTodo(${p.id})
+        "
+      >
+        追加
+      </button>
+
+    </div>
+    `;
+
+    container.appendChild(card);
+  });
 }
 
 render();
